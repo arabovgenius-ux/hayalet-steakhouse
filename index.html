@@ -1,765 +1,864 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hayalet Steak House | Премиальный ресторан в Алматы</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    
-    <!-- Подключение библиотек из ТЗ -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
-    <script src="https://unpkg.com/@barba/core"></script>
-    <script src="https://unpkg.com/split-type"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hayalet Steak House — Almaty</title>
+<meta name="description" content="Hayalet Steak House — стейки на углях, турецкое гостеприимство, Алматы.">
 
-    <!-- Настройка Tailwind CSS -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            gold: '#C5A880',
-                            goldDark: '#9E825B',
-                            goldLight: '#E5D5C0',
-                            bgPure: '#080808',
-                            bgCard: '#121212',
-                            bgMuted: '#1A1A1A',
-                            textMuted: '#999999'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Montserrat', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif']
-                    }
-                }
-            }
-        }
-    </script>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Кастомные стили для тонкой настройки интерфейса -->
-    <style>
-        /* Скрытие дефолтного скроллбара при плавном скролле */
-        html.lenis {
-            height: auto;
-        }
-        .lenis-smooth {
-            scroll-behavior: auto !important;
-        }
-        .lenis-smooth [data-lenis-prevent] {
-            overflow: clip;
-        }
-        .lenis-smooth scrollbar-width {
-            none;
-        }
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #080808;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #C5A880;
-            border-radius: 3px;
-        }
-        
-        /* Стили для кастомного курсора */
-        .custom-cursor {
-            width: 8px;
-            height: 8px;
-            background-color: #C5A880;
-            border-radius: 50%;
-            position: fixed;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: difference;
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-        }
-        .custom-cursor-ring {
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(197, 168, 128, 0.4);
-            border-radius: 50%;
-            position: fixed;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 9998;
-            transition: top 0.1s ease-out, left 0.1s ease-out, transform 0.2s;
-        }
-        
-        /* Эффект свечения */
-        .gold-glow {
-            box-shadow: 0 0 40px rgba(197, 168, 128, 0.15);
-        }
-        
-        /* Стилизация сплит-текста */
-        .line-wrapper {
-            overflow: hidden;
-        }
-        .char {
-            transform: translateY(115%);
-            transition: transform 0.05s;
-        }
-        
-        /* Интерактивные вкладки */
-        .menu-tab-btn.active {
-            color: #C5A880;
-            border-color: #C5A880;
-        }
-    </style>
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500;1,600&display=swap" rel="stylesheet">
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis smooth scroll -->
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+<!-- Barba.js (single-page app, included per spec) -->
+<script src="https://unpkg.com/@barba/core"></script>
+<!-- SplitType -->
+<script src="https://unpkg.com/split-type"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          char:    '#0b0a08',
+          terra:   '#171310',
+          terra2:  '#1e1712',
+          ember:   '#c1401c',
+          emberlt: '#e0642f',
+          gold:    '#d4a544',
+          goldlt:  '#e8c67a',
+          bone:    '#ede6d6',
+          smoke:   '#8a8074',
+        },
+        fontFamily: {
+          display: ['Unbounded', 'sans-serif'],
+          body: ['Manrope', 'sans-serif'],
+          accent: ['"Cormorant Garamond"', 'serif'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { background: #0b0a08; }
+  body {
+    background-color: #0b0a08;
+    color: #ede6d6;
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+  ::selection { background: #c1401c; color: #ede6d6; }
+
+  ::-webkit-scrollbar { width: 9px; }
+  ::-webkit-scrollbar-track { background: #0b0a08; }
+  ::-webkit-scrollbar-thumb { background: #3a3128; border-radius: 0; }
+  ::-webkit-scrollbar-thumb:hover { background: #c1401c; }
+
+  a, button { -webkit-tap-highlight-color: transparent; }
+  :focus-visible { outline: 2px solid #d4a544; outline-offset: 3px; }
+
+  /* film grain overlay */
+  .grain {
+    position: fixed; inset: 0; z-index: 60; pointer-events: none;
+    opacity: .05; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .hairline { background: linear-gradient(90deg, transparent, rgba(212,165,68,.5), transparent); height: 1px; }
+
+  .split-word { display: inline-block; will-change: transform, opacity; }
+  .char { display: inline-block; will-change: transform, opacity; }
+
+  .nav-link { position: relative; }
+  .nav-link::after {
+    content: ''; position: absolute; left: 0; bottom: -4px; width: 0; height: 1px;
+    background: #d4a544; transition: width .35s ease;
+  }
+  .nav-link:hover::after { width: 100%; }
+
+  .tab-btn[data-active="true"] {
+    background: #c1401c; color: #ede6d6; border-color: #c1401c;
+  }
+  .pill[data-active="true"] {
+    background: #d4a544; color: #0b0a08; border-color: #d4a544;
+  }
+
+  .menu-item { border-bottom: 1px solid rgba(212,165,68,.14); }
+  .menu-item:last-child { border-bottom: none; }
+
+  .marquee-track { display: flex; width: max-content; }
+
+  .glow-btn { box-shadow: 0 0 0 rgba(193,64,28,0); transition: box-shadow .4s ease, transform .3s ease; }
+  .glow-btn:hover { box-shadow: 0 0 34px rgba(193,64,28,.55); transform: translateY(-2px); }
+
+  .fig { overflow: hidden; }
+  .fig img { transition: transform 1.1s cubic-bezier(.16,1,.3,1); }
+  .fig:hover img { transform: scale(1.06); }
+
+  .reveal-panel[data-hidden="true"] { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+</style>
 </head>
-<body class="bg-brand-bgPure text-white font-sans antialiased selection:bg-brand-gold selection:text-black overflow-x-hidden" data-barba="wrapper">
+<body class="antialiased">
 
-    <!-- Кастомный курсор для премиального UX -->
-    <div class="custom-cursor hidden md:block" id="js-cursor"></div>
-    <div class="custom-cursor-ring hidden md:block" id="js-cursor-ring"></div>
+<div class="grain"></div>
 
-    <!-- Контейнер Barba.js для бесшовных переходов (на будущее) -->
-    <div data-barba="container" data-barba-namespace="home">
-        
-        <!-- Шапка / Навигация -->
-        <header class="fixed top-0 left-0 w-full z-50 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm border-b border-white/5 py-5 px-6 md:px-12 flex justify-between items-center">
-            <a href="#" class="font-serif text-xl md:text-2xl font-bold tracking-widest text-brand-gold hover:text-brand-goldLight transition-colors duration-300">
-                HAYALET
-                <span class="block text-[9px] tracking-[0.4em] font-sans text-white/60 font-light -mt-1">STEAK HOUSE</span>
-            </a>
-            
-            <nav class="hidden md:flex space-x-8 text-xs tracking-widest font-medium uppercase text-white/70">
-                <a href="#about" class="hover:text-brand-gold transition-colors duration-300 relative group py-2">Философия<span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-gold transition-all duration-300 group-hover:w-full"></span></a>
-                <a href="#menu" class="hover:text-brand-gold transition-colors duration-300 relative group py-2">Главное Меню<span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-gold transition-all duration-300 group-hover:w-full"></span></a>
-                <a href="#bar" class="hover:text-brand-gold transition-colors duration-300 relative group py-2">Бар & Вино<span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-gold transition-all duration-300 group-hover:w-full"></span></a>
-                <a href="#contacts" class="hover:text-brand-gold transition-colors duration-300 relative group py-2">Контакты<span class="absolute bottom-0 left-0 w-0 h-[1px] bg-brand-gold transition-all duration-300 group-hover:w-full"></span></a>
-            </nav>
+<!-- PRELOADER -->
+<div id="preloader" class="fixed inset-0 z-[100] bg-char flex items-center justify-center">
+  <div class="text-center">
+    <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4507%20%28%D1%84%D0%BE%D0%BD%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%29.png"
+         alt="Hayalet" class="w-20 h-20 mx-auto mb-4 opacity-90" id="preloader-logo"
+         onerror="this.style.display='none'">
+    <p class="font-display text-[11px] tracking-[0.4em] text-gold uppercase">Hayalet</p>
+  </div>
+</div>
 
-            <div>
-                <a href="https://wa.me/77010777756" target="_blank" class="border border-brand-gold text-brand-gold text-xs font-medium tracking-widest uppercase py-2.5 px-5 md:px-6 hover:bg-brand-gold hover:text-black transition-all duration-500 rounded-none">
-                    Забронировать
-                </a>
-            </div>
-        </header>
+<!-- NAV -->
+<header id="site-nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-500">
+  <nav class="max-w-[1400px] mx-auto flex items-center justify-between px-6 md:px-10 py-5">
+    <a href="#top" class="flex items-center gap-3">
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4507%20%28%D1%84%D0%BE%D0%BD%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%29.png"
+           alt="Hayalet Steak House" class="h-9 w-9 object-contain" onerror="this.style.display='none'">
+      <span class="font-display text-sm md:text-base tracking-[0.2em] text-bone">HAYALET</span>
+    </a>
+    <div class="hidden md:flex items-center gap-9 text-[13px] tracking-[0.08em] uppercase text-bone/80">
+      <a href="#about" class="nav-link">О нас</a>
+      <a href="#gallery" class="nav-link">Атмосфера</a>
+      <a href="#menu" class="nav-link">Меню</a>
+      <a href="#contact" class="nav-link">Контакты</a>
+    </div>
+    <a href="https://wa.me/77010777756" target="_blank" rel="noopener"
+       class="glow-btn hidden sm:inline-flex items-center gap-2 border border-gold/60 text-gold text-[12px] tracking-[0.1em] uppercase px-5 py-2.5">
+      Забронировать
+    </a>
+  </nav>
+</header>
 
-        <!-- Главный экран (Hero) -->
-        <section class="relative h-screen w-full flex items-center justify-center bg-brand-bgPure overflow-hidden">
-            <!-- Визуальный бэкграунд с параллаксом -->
-            <div class="absolute inset-0 w-full h-full opacity-40 z-0 scale-110" id="js-hero-bg">
-                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1920" alt="Hayalet Steak" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-brand-bgPure via-transparent to-black/70"></div>
-            </div>
+<!-- HERO -->
+<section id="top" class="relative min-h-[100svh] flex items-end overflow-hidden">
+  <div class="absolute inset-0">
+    <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4493.jpeg"
+         alt="Стейк Hayalet в золотом листе" class="w-full h-full object-cover object-center scale-110" id="hero-img"
+         onerror="this.parentElement.style.background='linear-gradient(160deg,#171310,#0b0a08)'">
+    <div class="absolute inset-0 bg-gradient-to-t from-char via-char/70 to-char/30"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-char/80 via-transparent to-char/40"></div>
+  </div>
 
-            <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
-                <p class="text-brand-gold uppercase tracking-[0.6em] text-xs md:text-sm font-medium mb-4 tracking-fade">Искусство огня и премиального вкуса</p>
-                <h1 class="font-serif text-5xl md:text-8xl lg:text-9xl font-bold tracking-tight mb-8 leading-none text-white overflow-hidden" id="js-main-title">
-                    HAYALET
-                </h1>
-                <div class="w-24 h-[1px] bg-brand-gold mx-auto mb-8 animate-line"></div>
-                <p class="max-w-xl mx-auto text-sm md:text-base text-white/70 font-light leading-relaxed mb-12 tracking-fade">
-                    Авторский стейк-хаус в Алматы. Мы превращаем стейки в гастрономические шедевры, раскрывая истинную текстуру премиального мяса.
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 tracking-fade">
-                    <a href="#menu" class="bg-brand-gold text-black text-xs font-semibold uppercase tracking-widest py-4 px-8 w-full sm:w-auto text-center hover:bg-brand-goldLight transition-colors duration-300">
-                        Посмотреть Меню
-                    </a>
-                    <a href="#contacts" class="border border-white/20 text-white text-xs font-semibold uppercase tracking-widest py-4 px-8 w-full sm:w-auto text-center hover:bg-white hover:text-black transition-colors duration-300">
-                        Как нас найти
-                    </a>
-                </div>
-            </div>
+  <div class="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-10 pb-16 md:pb-20 pt-40">
+    <p class="hero-eyebrow font-body text-[12px] md:text-[13px] tracking-[0.5em] uppercase text-gold mb-6 opacity-0">
+      Алматы · Мясо и огонь
+    </p>
+    <h1 class="font-display leading-[0.92] text-bone">
+      <span class="block text-[15vw] sm:text-[11vw] md:text-[8vw] lg:text-[7.2vw]" id="hero-line-1">HAYALET</span>
+      <span class="block text-[9vw] sm:text-[6.5vw] md:text-[4.4vw] lg:text-[3.8vw] text-ember" id="hero-line-2">STEAK HOUSE</span>
+    </h1>
+    <p class="hero-sub font-accent italic text-xl md:text-2xl text-bone/70 mt-8 max-w-lg opacity-0">
+      Мясо, выдержанное на углях. Гостеприимство, выдержанное во времени.
+    </p>
+    <div class="hero-cta flex flex-wrap gap-4 mt-10 opacity-0">
+      <a href="#menu" class="glow-btn bg-ember text-bone font-body font-semibold text-[13px] tracking-[0.08em] uppercase px-8 py-4">
+        Смотреть меню
+      </a>
+      <a href="https://wa.me/77010777756" target="_blank" rel="noopener"
+         class="border border-bone/30 text-bone font-body text-[13px] tracking-[0.08em] uppercase px-8 py-4 hover:border-gold hover:text-gold transition-colors">
+        Столик в WhatsApp
+      </a>
+    </div>
+  </div>
 
-            <!-- Элемент для красивого скролл-указателя -->
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-60">
-                <span class="text-[9px] uppercase tracking-[0.3em] font-light">Скролл</span>
-                <div class="w-[1px] h-12 bg-gradient-to-b from-brand-gold to-transparent"></div>
-            </div>
-        </section>
+  <div class="absolute right-6 md:right-10 bottom-10 z-10 hidden sm:flex flex-col items-center gap-3">
+    <span class="text-[10px] tracking-[0.35em] uppercase text-bone/50 rotate-180" style="writing-mode: vertical-rl;">Scroll</span>
+    <div class="w-px h-16 bg-bone/20 relative overflow-hidden">
+      <div id="scroll-line" class="absolute top-0 left-0 w-full h-1/3 bg-gold"></div>
+    </div>
+  </div>
+</section>
 
-        <!-- Раздел: Философия совершенства (About) -->
-        <section id="about" class="py-24 md:py-32 bg-brand-bgPure border-t border-white/5 relative z-10 overflow-hidden">
-            <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div class="js-reveal-left">
-                    <span class="text-brand-gold font-medium tracking-[0.3em] text-xs uppercase block mb-3">О ресторане</span>
-                    <h2 class="font-serif text-3xl md:text-5xl font-semibold mb-6 leading-tight">Кулинарная магия, рожденная в пламени</h2>
-                    <p class="text-brand-textMuted text-sm md:text-base font-light leading-relaxed mb-6">
-                        В Hayalet Steak House мы переосмыслили классическую культуру приготовления стейков. Каждый кусок говядины проходит строжайший отбор и процесс выдержки, чтобы достичь идеальной мягкости и раскрыть свой глубокий, насыщенный вкус.
-                    </p>
-                    <p class="text-brand-textMuted text-sm md:text-base font-light leading-relaxed mb-8">
-                        Наши шеф-повара виртуозно владеют открытым огнем, создавая блюда, которые захватывают не только рецепторы, но и воображение. Атмосфера роскоши, безупречный сервис и кулинарные традиции соединились здесь.
-                    </p>
-                    <div class="grid grid-cols-3 gap-6 border-t border-white/10 pt-8">
-                        <div>
-                            <div class="font-serif text-2xl md:text-3xl text-brand-gold font-bold">12%</div>
-                            <div class="text-[10px] uppercase text-white/50 tracking-widest mt-1">Сервис</div>
-                        </div>
-                        <div>
-                            <div class="font-serif text-2xl md:text-3xl text-brand-gold font-bold">Premium</div>
-                            <div class="text-[10px] uppercase text-white/50 tracking-widest mt-1">Качество мяса</div>
-                        </div>
-                        <div>
-                            <div class="font-serif text-2xl md:text-3xl text-brand-gold font-bold">Authentic</div>
-                            <div class="text-[10px] uppercase text-white/50 tracking-widest mt-1">Рецептура</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative overflow-hidden group aspect-[4/5] js-reveal-right">
-                    <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/0 transition-colors duration-500"></div>
-                    <img src="https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&q=80&w=1200" alt="Premium Beef" class="w-full h-full object-cover js-parallax-img scale-110">
-                </div>
-            </div>
-        </section>
+<!-- MARQUEE 1 -->
+<div class="relative bg-gold py-4 -rotate-1 -mt-6 md:-mt-8 z-20 overflow-hidden">
+  <div class="marquee-track" id="marquee-1"></div>
+</div>
 
-        <!-- Раздел: Полное Гастрономическое Меню -->
-        <section id="menu" class="py-24 md:py-32 bg-brand-bgCard relative z-10">
-            <div class="max-w-7xl mx-auto px-6 md:px-12">
-                
-                <div class="text-center max-w-2xl mx-auto mb-16 js-fade-up">
-                    <span class="text-brand-gold font-medium tracking-[0.3em] text-xs uppercase block mb-3">MЕНЮ RESTAURANT</span>
-                    <h2 class="font-serif text-3xl md:text-5xl font-semibold mb-4">Гастрономическая Карта</h2>
-                    <p class="text-brand-textMuted text-xs md:text-sm font-light uppercase tracking-widest">Все цены указаны в тенге (₸). Обслуживание 12%</p>
-                </div>
+<!-- ABOUT -->
+<section id="about" class="relative py-28 md:py-36 bg-char">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 grid md:grid-cols-12 gap-10 md:gap-16 items-center">
+    <div class="md:col-span-5 reveal-up">
+      <p class="font-body text-[12px] tracking-[0.4em] uppercase text-gold mb-5">Философия</p>
+      <h2 class="font-display text-3xl md:text-5xl leading-[1.05] text-bone mb-8">
+        Там, где дым мангала&nbsp;встречается&nbsp;с турецким чаем
+      </h2>
+      <p class="text-bone/70 leading-relaxed mb-5">
+        Hayalet — это открытый огонь, выдержанная говядина и подача, которую не спутаешь ни с чем: стейки в
+        сусальном золоте, фламбе прямо у стола и турецкий завтрак, рассчитанный на всю компанию.
+      </p>
+      <p class="text-bone/70 leading-relaxed">
+        Мы придерживаемся простого правила: мясо говорит само за себя, если дать ему время на углях и не мешать
+        лишним. Остальное — гостеприимство, музыка и хороший бокал вина — дополняет вечер, а не отвлекает от него.
+      </p>
+    </div>
+    <div class="md:col-span-7 grid grid-cols-2 gap-4 md:gap-6">
+      <div class="fig reveal-up mt-10">
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4496.jpeg"
+             alt="Фламбе у стола" class="w-full h-72 md:h-96 object-cover">
+      </div>
+      <div class="fig reveal-up">
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4497.jpeg"
+             alt="Стейки на углях" class="w-full h-72 md:h-96 object-cover">
+      </div>
+    </div>
+  </div>
+</section>
 
-                <!-- Вкладки категорий меню -->
-                <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-16 border-b border-white/5 pb-6 js-fade-up">
-                    <button onclick="switchMenu('breakfast')" class="menu-tab-btn active font-serif text-sm md:text-lg tracking-widest uppercase border-b-2 border-transparent pb-3 transition-all duration-300 hover:text-brand-gold" id="btn-breakfast">Завтраки</button>
-                    <button onclick="switchMenu('burgers')" class="menu-tab-btn font-serif text-sm md:text-lg tracking-widest uppercase border-b-2 border-transparent pb-3 transition-all duration-300 hover:text-brand-gold" id="btn-burgers">Бургеры & Де补ерты</button>
-                    <button onclick="switchMenu('bar')" class="menu-tab-btn font-serif text-sm md:text-lg tracking-widest uppercase border-b-2 border-transparent pb-3 transition-all duration-300 hover:text-brand-gold" id="btn-bar">Барная карта</button>
-                    <button onclick="switchMenu('wine')" class="menu-tab-btn font-serif text-sm md:text-lg tracking-widest uppercase border-b-2 border-transparent pb-3 transition-all duration-300 hover:text-brand-gold" id="btn-wine">Винная карта</button>
-                </div>
+<!-- GALLERY -->
+<section id="gallery" class="relative py-28 md:py-36 bg-terra overflow-hidden">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 mb-14">
+    <p class="font-body text-[12px] tracking-[0.4em] uppercase text-gold mb-5 reveal-up">Атмосфера</p>
+    <h2 class="font-display text-3xl md:text-5xl text-bone reveal-up">Зал, кухня и то, что&nbsp;между&nbsp;ними</h2>
+  </div>
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+    <div class="fig parallax-img col-span-1 row-span-2">
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4498.jpeg" alt="Стейк Тибон" class="w-full h-[280px] md:h-[520px] object-cover">
+    </div>
+    <div class="fig parallax-img col-span-1">
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4501.jpeg" alt="Интерьер зала" class="w-full h-[220px] md:h-[248px] object-cover">
+    </div>
+    <div class="fig parallax-img col-span-1">
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4503.jpeg" alt="Бургер Hayalet" class="w-full h-[220px] md:h-[248px] object-cover">
+    </div>
+    <div class="fig parallax-img col-span-1">
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4500.jpeg" alt="Зал Hayalet" class="w-full h-[220px] md:h-[248px] object-cover">
+    </div>
+    <div class="fig parallax-img col-span-2 md:col-span-1 row-span-2">
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4502.jpeg" alt="Турецкий завтрак" class="w-full h-[280px] md:h-[520px] object-cover">
+    </div>
+    <div class="fig parallax-img col-span-1">
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4504.jpeg" alt="Рыба на гриле" class="w-full h-[220px] md:h-[248px] object-cover">
+    </div>
+    <div class="fig parallax-img col-span-1">
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4494.jpeg" alt="Десерт Павлова" class="w-full h-[220px] md:h-[248px] object-cover">
+    </div>
+  </div>
+</section>
 
-                <!-- Содержимое меню (Категории) -->
-                <div class="relative min-h-[500px]">
-                    
-                    <!-- КАТЕГОРИЯ: ЗАВТРАКИ -->
-                    <div id="cat-breakfast" class="menu-category-content grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-8 opacity-100 transition-all duration-500">
-                        <!-- Блок комбо -->
-                        <div class="col-span-1 lg:col-span-2 bg-brand-bgMuted/60 p-6 md:p-8 border border-brand-gold/10 gold-glow mb-6">
-                            <h3 class="font-serif text-brand-gold text-lg md:text-xl font-medium uppercase tracking-wider mb-6 pb-2 border-b border-brand-gold/20">Традиционные турецкие завтраки</h3>
-                            <div class="space-y-6">
-                                <div class="flex justify-between items-baseline gap-4">
-                                    <div>
-                                        <h4 class="font-medium text-base md:text-lg hover:text-brand-gold transition-colors">Турецкий завтрак на одного</h4>
-                                        <p class="text-xs text-brand-textMuted mt-1 font-light">Глазунья, менемен, корзинка свежего хлеба, турецкая выпечка, борек, сметана, три вида оливок, три вида изысканных сыров, ветчина, овощная нарезка, фирменная аджика, сухофрукты, варенье, нутелла, мед, сливочное масло, тахин.</p>
-                                    </div>
-                                    <span class="font-serif text-brand-gold font-semibold whitespace-nowrap">8 490 ₸</span>
-                                </div>
-                                <div class="flex justify-between items-baseline gap-4 border-t border-white/5 pt-6">
-                                    <div>
-                                        <h4 class="font-medium text-base md:text-lg hover:text-brand-gold transition-colors">Турецкий завтрак на двоих</h4>
-                                        <p class="text-xs text-brand-textMuted mt-1 font-light">Удвоенная порция традиционного турецкого сета для идеального утра вдвоем.</p>
-                                    </div>
-                                    <span class="font-serif text-brand-gold font-semibold whitespace-nowrap">16 490 ₸</span>
-                                </div>
-                                <div class="flex justify-between items-baseline gap-4 border-t border-white/5 pt-6">
-                                    <div>
-                                        <h4 class="font-medium text-base md:text-lg hover:text-brand-gold transition-colors">Турецкий завтрак на четверых</h4>
-                                        <p class="text-xs text-brand-textMuted mt-1 font-light">Максимальный роскошный сет для большой компании или семейного завтрака.</p>
-                                    </div>
-                                    <span class="font-serif text-brand-gold font-semibold whitespace-nowrap">28 990 ₸</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Отдельные позиции завтраков -->
-                        <div class="space-y-6">
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Яйца Бенедикт</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Хрустящий тост, нежный соус голландез, спелый авокадо, копченая семга, яйцо пашот.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">3 790 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Яичница с турецкой колбасой</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Традиционное утреннее блюдо со специями и пикантным суджуком.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">2 690 ₸</span>
-                            </div>
-                        </div>
-
-                        <div class="space-y-6">
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Диетический омлет</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Яйца, свежая зелень, спелые помидоры, оливковое масло первого отжима, соль, перец.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">1 490 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Омлет с сыром</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Яйца, фермерское молоко, нежный сыр кашар, специи.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">1 590 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Сосиски на сковороде</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Обжаренные до золотистой корочки сочные сосиски с легким ароматом дымка.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">2 450 ₸</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- КАТЕГОРИЯ: БУРГЕРЫ И ДЕСЕРТЫ -->
-                    <div id="cat-burgers" class="menu-category-content grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-8 hidden opacity-0 transition-all duration-500">
-                        <!-- Бургеры -->
-                        <div class="space-y-6">
-                            <h3 class="font-serif text-brand-gold text-lg uppercase tracking-widest mb-4 pb-2 border-b border-white/5">Фирменные бургеры (подаются с картофелем фри и соусами)</h3>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Гамбургер</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Сочная мраморная котлета из говядины, спелый помидор, хрустящие салатные листья.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">4 390 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Чизбургер</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Классический бургер с добавлением нежного плавленого сыра кашар.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">4 590 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Лукум бургер</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Мягчайшие кусочки говяжьего лукума, фирменный соус, салатные листья.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">5 390 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Асадо бургер</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Фирменный бургер с томленым ультра-нежным мясом Асадо и фуме.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">6 490 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Hayalet бургер</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Шедевр от шефа: премиальный фарш, секретные специи, идеальная прожарка.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">5 990 ₸</span>
-                            </div>
-                        </div>
-
-                        <!-- Десерты -->
-                        <div class="space-y-6">
-                            <h3 class="font-serif text-brand-gold text-lg uppercase tracking-widest mb-4 pb-2 border-b border-white/5">Премиальные Десерты</h3>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Баклава (Хавуч дилим) с мороженым</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Настоящая турецкая баклава с обилием фисташек, подается с премиальным мороженым мараш.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">2 990 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Чизкейк</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Классический нежный творожный десерт с ягодным или шоколадным топпингом.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">3 190 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Сутлач</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Традиционный турецкий запеченный рисовый пудинг с ванильным ароматом.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">1 490 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4 group">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base group-hover:text-brand-gold transition-colors">Магнолия</h4>
-                                    <p class="text-xs text-brand-textMuted mt-1 font-light">Легкий и воздушный десерт со свежими фруктами, печеньем и заварным кремом.</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium whitespace-nowrap">2 490 ₸</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- КАТЕГОРИЯ: БАРНАЯ КАРТА -->
-                    <div id="cat-bar" class="menu-category-content grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-8 hidden opacity-0 transition-all duration-500">
-                        <!-- Прохладительные -->
-                        <div class="space-y-6">
-                            <h3 class="font-serif text-brand-gold text-lg uppercase tracking-widest mb-4 pb-2 border-b border-white/5">Холодные Напитки & Кофе</h3>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Coca-Cola / Fanta / Sprite</h4>
-                                <span class="font-serif text-brand-gold font-medium">990 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Schweppes</h4>
-                                <span class="font-serif text-brand-gold font-medium">1 590 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Red Bull</h4>
-                                <span class="font-serif text-brand-gold font-medium">1 590 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Borjomi</h4>
-                                <span class="font-serif text-brand-gold font-medium">1 690 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base">Ayran</h4>
-                                    <p class="text-xs text-brand-textMuted font-light mt-0.5">Освежающий турецкий айран</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium">890 / 2 490 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Эспрессо / Американо</h4>
-                                <span class="font-serif text-brand-gold font-medium">1 090 / 1 190 ₸</span>
-                            </div>
-                        </div>
-
-                        <!-- Крепкий алкоголь -->
-                        <div class="space-y-6">
-                            <h3 class="font-serif text-brand-gold text-lg uppercase tracking-widest mb-4 pb-2 border-b border-white/5">Крепкие Напитки (50 мл)</h3>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Finlandia Vodka</h4>
-                                <span class="font-serif text-brand-gold font-medium">2 100 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Absolut Vodka</h4>
-                                <span class="font-serif text-brand-gold font-medium">2 200 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Beluga Noble</h4>
-                                <span class="font-serif text-brand-gold font-medium">3 700 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Jagermeister / Bailey's</h4>
-                                <span class="font-serif text-brand-gold font-medium">2 200 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Olmeca Tequila (Gold/Silver)</h4>
-                                <span class="font-serif text-brand-gold font-medium">2 100 / 2 200 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <h4 class="font-medium text-sm md:text-base">Bacardi Rum (Carta Blanca/Negra)</h4>
-                                <span class="font-serif text-brand-gold font-medium">2 200 / 2 300 ₸</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- КАТЕГОРИЯ: ВИННАЯ КАРТА -->
-                    <div id="cat-wine" class="menu-category-content grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-8 hidden opacity-0 transition-all duration-500">
-                        <!-- Игристое и белое -->
-                        <div class="space-y-6">
-                            <h3 class="font-serif text-brand-gold text-lg uppercase tracking-widest mb-4 pb-2 border-b border-white/5">Игристые & Белые Вина</h3>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base">Prosecco IL Fresco, Villa Sandi, Brut</h4>
-                                    <p class="text-xs text-brand-textMuted font-light mt-0.5">Италия, Венето</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium">27 000 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base">Drappier, "Carte d'Or" Brut</h4>
-                                    <p class="text-xs text-brand-textMuted font-light mt-0.5">Франция, Шампань</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium">85 000 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base">Pinot Grigio "Vivolo di Sasso"</h4>
-                                    <p class="text-xs text-brand-textMuted font-light mt-0.5">Италия (Бокал / Бутылка)</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium">3 200 / 14 000 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base">Chardonnay, Les Jamelles</h4>
-                                    <p class="text-xs text-brand-textMuted font-light mt-0.5">Франция (Бокал / Бутылка)</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium">4 500 / 20 000 ₸</span>
-                            </div>
-                        </div>
-
-                        <!-- Красные и розе -->
-                        <div class="space-y-6">
-                            <h3 class="font-serif text-brand-gold text-lg uppercase tracking-widest mb-4 pb-2 border-b border-white/5">Красные & Розовые Вина</h3>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base">Clair de Rose, Les Jamelles</h4>
-                                    <p class="text-xs text-brand-textMuted font-light mt-0.5">Розовое, Франция</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium">3 950 / 15 000 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base">Allegre, Sangiovese, Cielo e Terra</h4>
-                                    <p class="text-xs text-brand-textMuted font-light mt-0.5">Красное полусладкое, Италия</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium">3 400 / 17 000 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base">Shiraz "Beats the Devil"</h4>
-                                    <p class="text-xs text-brand-textMuted font-light mt-0.5">Австралия</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium">3 900 / 18 000 ₸</span>
-                            </div>
-                            <div class="flex justify-between items-baseline gap-4 border-b border-white/5 pb-4">
-                                <div>
-                                    <h4 class="font-medium text-sm md:text-base">Riesling, Dr.Lo, Mosel (Alcohol 0%)</h4>
-                                    <p class="text-xs text-brand-textMuted font-light mt-0.5">Германия</p>
-                                </div>
-                                <span class="font-serif text-brand-gold font-medium">23 000 ₸</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Галерея атмосферы с эффектом параллакса -->
-        <section id="bar" class="py-20 bg-brand-bgPure overflow-hidden relative z-10">
-            <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="h-[400px] overflow-hidden relative group js-fade-up">
-                    <img src="https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&q=80&w=800" alt="Steak Cooking" class="w-full h-full object-cover js-parallax-img scale-110">
-                </div>
-                <div class="h-[400px] overflow-hidden relative group js-fade-up" style="transition-delay: 150ms;">
-                    <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800" alt="Luxury Bar" class="w-full h-full object-cover js-parallax-img scale-110">
-                </div>
-                <div class="h-[400px] overflow-hidden relative group js-fade-up" style="transition-delay: 300ms;">
-                    <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800" alt="Wine Pouring" class="w-full h-full object-cover js-parallax-img scale-110">
-                </div>
-            </div>
-        </section>
-
-        <!-- Раздел: Контакты и Карта (Footer) -->
-        <footer id="contacts" class="bg-black text-white py-20 border-t border-white/5 relative z-10">
-            <div class="max-w-7xl mx-auto px-6 md:px-12">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8 items-start mb-16">
-                    
-                    <!-- Бренд / Локация -->
-                    <div class="js-fade-up">
-                        <h3 class="font-serif text-2xl font-bold tracking-widest text-brand-gold mb-6">HAYALET</h3>
-                        <p class="text-brand-textMuted text-sm font-light leading-relaxed mb-6 max-w-sm">
-                            Локация премиального гастрономического опыта в Алматы. Ждем вас ценителей настоящего мраморного мяса и эксклюзивного сервиса.
-                        </p>
-                        <div class="space-y-4">
-                            <div class="flex items-start gap-3">
-                                <span class="text-brand-gold font-semibold text-xs tracking-wider uppercase mt-0.5">Адрес:</span>
-                                <a href="https://maps.app.goo.gl/7itNaTcKfrpPj84x5?g_st=ic" target="_blank" class="text-sm text-white/80 hover:text-brand-gold transition-colors font-light">
-                                    г. Алматы, Казахстан<br>
-                                    <span class="text-xs text-brand-gold underline mt-1 block">Открыть на Google Maps</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Связь / Бронь -->
-                    <div class="js-fade-up" style="transition-delay: 100ms;">
-                        <h4 class="font-serif text-lg font-medium tracking-wide text-white mb-6">Резерв & Вопросы</h4>
-                        <p class="text-brand-textMuted text-sm font-light mb-6">Рекомендуем бронировать столы заранее, особенно в вечернее время и выходные дни.</p>
-                        <div class="space-y-3">
-                            <a href="https://wa.me/77010777756" target="_blank" class="flex items-center gap-3 group text-white hover:text-brand-gold transition-colors">
-                                <span class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-brand-gold transition-colors">
-                                    <span class="text-[10px] text-brand-gold">WA</span>
-                                </span>
-                                <span class="text-base font-medium tracking-wide">+7 701 077 7756</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Социальные сети -->
-                    <div class="js-fade-up" style="transition-delay: 200ms;">
-                        <h4 class="font-serif text-lg font-medium tracking-wide text-white mb-6">Мы в соцсетях</h4>
-                        <p class="text-brand-textMuted text-sm font-light mb-6">Следите за обновлениями меню, закрытыми гастрономическими вечерами и процессами на нашей кухне.</p>
-                        <a href="https://www.instagram.com/hayalet.almaty?igsh=dmhzdWU5YnJ2ankz" target="_blank" class="inline-block border border-white/20 text-white text-xs font-semibold uppercase tracking-widest py-3.5 px-6 hover:bg-brand-gold hover:text-black hover:border-brand-gold transition-all duration-300">
-                            Instagram @hayalet.almaty
-                        </a>
-                    </div>
-
-                </div>
-
-                <!-- Подвал -->
-                <div class="border-t border-white/5 pt-8 flex flex-col md:row flex-col sm:flex-row justify-between items-center gap-4 text-xs text-brand-textMuted font-light">
-                    <p>&copy; 2026 Hayalet Steak House. Все права защищены.</p>
-                    <p class="tracking-widest uppercase text-[10px]">Premium Experience</p>
-                </div>
-            </div>
-        </footer>
-
+<!-- MENU -->
+<section id="menu" class="relative py-28 md:py-36 bg-char">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+      <div>
+        <p class="font-body text-[12px] tracking-[0.4em] uppercase text-gold mb-5 reveal-up">Меню</p>
+        <h2 class="font-display text-3xl md:text-5xl text-bone reveal-up">Полная карта Hayalet</h2>
+      </div>
+      <p class="text-bone/50 text-sm reveal-up">Цены указаны в тенге (₸) · обслуживание 12%</p>
     </div>
 
-    <!-- Интерактивные скрипты для управления логикой анимации и плавной прокрутки -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // 1. Инициализация мягкого премиального скролла Lenis
-            const lenis = new Lenis({
-                duration: 1.4,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                smoothWheel: true,
-                orientation: 'vertical'
-            });
+    <!-- top-level tabs -->
+    <div class="flex flex-wrap gap-3 mb-10 reveal-up">
+      <button class="tab-btn border border-bone/25 text-bone/80 text-[12px] tracking-[0.1em] uppercase px-5 py-2.5 transition-colors" data-tab="food" data-active="true">Основное меню</button>
+      <button class="tab-btn border border-bone/25 text-bone/80 text-[12px] tracking-[0.1em] uppercase px-5 py-2.5 transition-colors" data-tab="bar">Барное меню</button>
+      <button class="tab-btn border border-bone/25 text-bone/80 text-[12px] tracking-[0.1em] uppercase px-5 py-2.5 transition-colors" data-tab="wine">Винная карта</button>
+    </div>
 
-            function raf(time) {
-                lenis.raf(time);
-                requestAnimationFrame(raf);
-            }
-            requestAnimationFrame(raf);
+    <!-- panels injected by JS -->
+    <div id="panel-food" class="reveal-panel" data-hidden="false">
+      <div id="pills-food" class="flex flex-wrap gap-2 mb-10 sticky top-[72px] z-30 bg-char/95 backdrop-blur py-3"></div>
+      <div id="cats-food"></div>
+    </div>
+    <div id="panel-bar" class="reveal-panel" data-hidden="true">
+      <div id="pills-bar" class="flex flex-wrap gap-2 mb-10 sticky top-[72px] z-30 bg-char/95 backdrop-blur py-3"></div>
+      <div id="cats-bar"></div>
+    </div>
+    <div id="panel-wine" class="reveal-panel" data-hidden="true">
+      <div id="pills-wine" class="flex flex-wrap gap-2 mb-10 sticky top-[72px] z-30 bg-char/95 backdrop-blur py-3"></div>
+      <div id="cats-wine"></div>
+    </div>
+  </div>
+</section>
 
-            // Синхронизация Lenis с GSAP ScrollTrigger
-            lenis.on('scroll', ScrollTrigger.update);
-            gsap.ticker.add((time) => {
-                lenis.raf(time * 1000);
-            });
-            gsap.ticker.lagSmoothing(0);
+<!-- MARQUEE 2 -->
+<div class="relative bg-ember py-4 rotate-1 z-20 overflow-hidden">
+  <div class="marquee-track" id="marquee-2"></div>
+</div>
 
-            // 2. Элегантный кастомный курсор
-            const cursor = document.getElementById('js-cursor');
-            const cursorRing = document.getElementById('js-cursor-ring');
-            
-            document.addEventListener('mousemove', (e) => {
-                gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0 });
-                gsap.to(cursorRing, { x: e.clientX, y: e.clientY, duration: 0.15 });
-            });
+<!-- CONTACT / FOOTER -->
+<section id="contact" class="relative py-28 md:py-36 bg-terra">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
+    <div class="grid md:grid-cols-2 gap-14 md:gap-10 items-start">
+      <div class="reveal-up">
+        <p class="font-body text-[12px] tracking-[0.4em] uppercase text-gold mb-5">Ждём вас</p>
+        <h2 class="font-display text-4xl md:text-6xl leading-[1.02] text-bone mb-8">
+          Стол уже<br>разгорается
+        </h2>
+        <p class="text-bone/60 leading-relaxed max-w-md">
+          Пишите или звоните — подберём столик, соберём компанию под турецкий завтрак или зарезервируем место
+          у мангала.
+        </p>
+      </div>
 
-            // Интерактив курсора на ссылки
-            const links = document.querySelectorAll('a, button, .menu-tab-btn');
-            links.forEach(link => {
-                link.addEventListener('mouseenter', () => {
-                    gsap.to(cursorRing, { scale: 1.5, backgroundColor: 'rgba(197, 168, 128, 0.1)', borderColor: '#C5A880', duration: 0.3 });
-                    gsap.to(cursor, { scale: 0.5, duration: 0.3 });
-                });
-                link.addEventListener('mouseleave', () => {
-                    gsap.to(cursorRing, { scale: 1, backgroundColor: 'transparent', borderColor: 'rgba(197, 168, 128, 0.4)', duration: 0.3 });
-                    gsap.to(cursor, { scale: 1, duration: 0.3 });
-                });
-            });
+      <div class="grid sm:grid-cols-2 gap-8 reveal-up">
+        <div>
+          <p class="text-[11px] tracking-[0.3em] uppercase text-smoke mb-3">Адрес</p>
+          <a href="https://maps.app.goo.gl/7itNaTcKfrpPj84x5?g_st=ic" target="_blank" rel="noopener"
+             class="text-bone hover:text-gold transition-colors underline underline-offset-4 decoration-gold/40">
+            Открыть на карте
+          </a>
+          <p class="text-bone/50 text-sm mt-1">Алматы</p>
+        </div>
+        <div>
+          <p class="text-[11px] tracking-[0.3em] uppercase text-smoke mb-3">WhatsApp</p>
+          <a href="https://wa.me/77010777756" target="_blank" rel="noopener"
+             class="text-bone hover:text-gold transition-colors">+7 701 077 7756</a>
+        </div>
+        <div>
+          <p class="text-[11px] tracking-[0.3em] uppercase text-smoke mb-3">Instagram</p>
+          <a href="https://www.instagram.com/hayalet.almaty" target="_blank" rel="noopener"
+             class="text-bone hover:text-gold transition-colors">@hayalet.almaty</a>
+        </div>
+        <div>
+          <p class="text-[11px] tracking-[0.3em] uppercase text-smoke mb-3">Бронирование</p>
+          <a href="https://wa.me/77010777756" target="_blank" rel="noopener"
+             class="glow-btn inline-flex items-center gap-2 bg-ember text-bone text-[12px] tracking-[0.08em] uppercase px-6 py-3 mt-1">
+            Написать в WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
 
-            // 3. Анимация появления заголовков при помощи SplitType и GSAP
-            const mainTitle = document.getElementById('js-main-title');
-            if (mainTitle) {
-                const split = new SplitType(mainTitle, { types: 'chars' });
-                gsap.from(split.chars, {
-                    opacity: 0,
-                    y: 80,
-                    stagger: 0.04,
-                    duration: 1.2,
-                    ease: 'power4.out',
-                    delay: 0.4
-                });
-            }
+    <div class="hairline my-16"></div>
 
-            // Плавное появление остальных элементов первого экрана
-            gsap.from('.tracking-fade', {
-                opacity: 0,
-                y: 30,
-                duration: 1,
-                stagger: 0.2,
-                ease: 'power3.out',
-                delay: 0.8
-            });
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4507%20%28%D1%84%D0%BE%D0%BD%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%29.png"
+             alt="Hayalet" class="h-8 w-8 object-contain" onerror="this.style.display='none'">
+        <span class="font-display text-sm tracking-[0.2em] text-bone">HAYALET STEAK HOUSE</span>
+      </div>
+      <p class="text-bone/40 text-xs tracking-wide">Almaty, Kazakhstan</p>
+    </div>
+  </div>
+</section>
 
-            gsap.from('.animate-line', {
-                width: 0,
-                duration: 1,
-                ease: 'power3.out',
-                delay: 0.6
-            });
+<script>
+/* graceful fallback for any image that fails to load */
+document.addEventListener('error', function(e){
+  const t = e.target;
+  if(t.tagName === 'IMG' && !t.dataset.fallbackApplied){
+    t.dataset.fallbackApplied = 'true';
+    t.style.display = 'none';
+    if(t.parentElement){ t.parentElement.style.background = 'linear-gradient(160deg,#1e1712,#0b0a08)'; }
+  }
+}, true);
 
-            // Parallax эффект для фонового изображения Hero
-            gsap.to('#js-hero-bg img', {
-                yPercent: 15,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: '#js-hero-bg',
-                    start: 'top top',
-                    end: 'bottom top',
-                    scrub: true
-                }
-            });
+/* =========================================================
+   MENU DATA
+========================================================= */
+const it = (n, p, d) => d ? {n,p,d} : {n,p};
 
-            // 4. Реализация анимаций при прокрутке (ScrollTrigger)
-            // Эффект Параллакса картинок
-            gsap.utils.toArray('.js-parallax-img').forEach(img => {
-                gsap.to(img, {
-                    yPercent: -15,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: img.parentElement,
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: true
-                    }
-                });
-            });
+const FOOD = [
+  { cat: "Завтраки", items: [
+    it("Турецкий завтрак на одного","8 490 ₸"),
+    it("Турецкий завтрак на двоих","16 490 ₸"),
+    it("Турецкий завтрак на четверых","28 990 ₸","Глазунья, менемен, корзинка хлеба, турецкая выпечка, борек, сметана, три вида оливок, три вида сыров, ветчина, овощная нарезка, аджика, сухофрукты, варенье, нутелла, мед, масло, тахин"),
+    it("Диетический омлет","1 490 ₸","Яйца, зелень, помидор, соль, перец, оливковое масло"),
+    it("Омлет с сыром","1 590 ₸","Яйца, молоко, сыр кашар, соль, перец"),
+    it("Яйца Бенедикт","3 790 ₸","Тост, соус голландез, авокадо, копчёная сёмга, яйцо пашот"),
+    it("Яичница с турецкой колбасой","2 690 ₸"),
+    it("Сосиски на сковороде","2 450 ₸"),
+    it("Суджук","2 490 ₸","Турецкая колбаса на сковороде"),
+    it("Менемен","1 990 ₸","Яйца, помидоры, соль, перец, зелень"),
+    it("Панкейки","1 990 ₸","Яйца, молоко, мука, сахар, соль"),
+    it("Омлет с грибами","1 790 ₸","Яйцо, грибы"),
+    it("Мыхлама","3 490 ₸","Кукурузная мука, сливочное масло, вода, сыр"),
+    it("Яичница с кавурмой","3 490 ₸"),
+    it("Английский завтрак","4 490 ₸"),
+  ]},
+  { cat: "Супы", items: [
+    it("Чечевичный суп","1 890 ₸","Лёгкий шелковистый суп из красной чечевицы"),
+    it("Фирменный мясной суп Hayalet","2 990 ₸","Наваристый мясной суп из говядины от шеф-повара"),
+    it("Хаялет суп","3 490 ₸","Крем, молоко, мука, масло, нохут, рис, мясо говядины 100 г"),
+  ]},
+  { cat: "Салаты", items: [
+    it("Греческий салат","2 990 ₸","Помидоры, сладкий перец, огурцы, чёрные оливки, петрушка, брынза, оливковое масло"),
+    it("Салат с сыром тулум","3 990 ₸","Листья салата, помидоры, кукуруза, сыр тулум, грецкий орех"),
+    it("Салат с авокадо и киноа","3 850 ₸","Авокадо, киноа, яблоко, имбирь, грецкий орех"),
+    it("Тёплый салат с говядиной","3 950 ₸","Говядина на мангале, сезонная зелень, лимон, оливковое масло"),
+    it("Цезарь с курицей","3 490 ₸","Айсберг, куриное филе, перепелиные яйца, сыр"),
+    it("Салат Капрезе","3 990 ₸","Моцарелла и свежие помидоры под фирменным соусом"),
+    it("Салат с креветками","4 990 ₸","Микс салата, креветки, гранат, пармезан"),
+    it("Салат Роккет","3 490 ₸","Руккола, пармезан, сладкая кукуруза, гранат, черри"),
+    it("Гавурда","3 250 ₸","Помидоры, огурцы, сладкий перец, грецкий орех, гранатовый соус"),
+    it("Чобан салат","2 850 ₸","Помидор, огурцы, петрушка, красный лук"),
+    it("Салат Hayalet festival","4 990 ₸","Сушёный изюм, черри, грецкий орех, малина, яблоко, малиновый соус"),
+    it("Опера салат","4 890 ₸","Сушёные финики, черри, манго, редиска, фасоль, сладкий картофель"),
+    it("Салат Hayalet star","4 990 ₸","Брокколи, свёкла, финики с сыром, миндаль, апельсин, пармезан"),
+    it("Буратта","4 990 ₸","Руккола, черри, нежный сыр буратта, фисташки"),
+  ]},
+  { cat: "Холодные закуски", items: [
+    it("Карпаччо из говядины","3 990 ₸","Тонкие слайсы вырезки, оливковое масло, бальзамик, руккола, сыр"),
+    it("Мясное ассорти","5 990 ₸","Ростбиф, запечённая курица, говяжий язык, копчёная вырезка"),
+    it("Beef Tartar","5 990 ₸","Говяжий бонфиле, перепелиные яйца, красный лук, острый соус"),
+    it("Сырная тарелка","6 490 ₸","Чеддер, моцарелла, чечил, пармезан, езене"),
+  ]},
+  { cat: "Турецкие мезе", items: [
+    it("Джаджик","2 490 ₸","Турецкий йогурт, огурцы"),
+    it("Чи-кёфте","2 450 ₸"),
+    it("Атом","1 790 ₸","Сюзме, острый перец, чеснок"),
+    it("Хумус","1 990 ₸","Нут, чеснок, тахини, кимён"),
+    it("Долма в гранатовом соусе","1 990 ₸","Рис, лук, гранатовые листья"),
+    it("Мутаббель с баклажаном","1 790 ₸","Баклажан, турецкий йогурт, чеснок, тахини"),
+    it("Мутаббель со свёклой","1 790 ₸","Свёкла, йогурт, чеснок, тахини, кунжут"),
+    it("Бабагануш","1 990 ₸","Баклажан, болгарский перец, чеснок"),
+    it("Эзме","1 990 ₸","Перец, помидор, огурцы, острый перец, гранатовый соус"),
+    it("Чингене","1 790 ₸","Кабачки, турецкий йогурт, чеснок, грецкий орех"),
+    it("Ассорти мезе","6 990 ₸"),
+    it("Муамарра","2 290 ₸","Красный сладкий перец, панировочные сухари, лук, грецкий орех · New"),
+    it("Хаялет бёрек","3 190 ₸","Блинчики, капуста, морковь, курица"),
+  ]},
+  { cat: "Горячие закуски", items: [
+    it("Ичли кёфте","2 790 ₸","Говяжий фарш, лук, зелень, перец, булгур"),
+    it("Жареная картошка по-мерсински","2 100 ₸"),
+    it("Запечённые грибы с сыром чеддер","2 690 ₸"),
+    it("Запечённые креветки","5 190 ₸","Перец, грибы, помидор, креветки"),
+    it("Турецкие манты Çitir manti","3 890 ₸","Йогурт, манты, чеснок, помидорный соус"),
+  ]},
+  { cat: "Гарниры", items: [
+    it("Хумус с мясом","3 990 ₸"),
+    it("Овощи на гриле","2 790 ₸"),
+    it("Кумпир с сыром","2 490 ₸"),
+    it("Тушёный шпинат с грибами","1 790 ₸"),
+    it("Булгур","1 390 ₸"),
+    it("Фри","1 790 ₸"),
+    it("Картофельные дольки","1 990 ₸"),
+    it("Рис","1 390 ₸"),
+    it("Грибы с йогуртом","3 490 ₸","Жареный лаваш, турецкий йогурт, жареные грибы"),
+  ]},
+  { cat: "Стейки", items: [
+    it("Yaprak New York","9 990 ₸"),
+    it("Антрекот","7 490 ₸"),
+    it("Стейк «Рибай»","11 490 ₸"),
+    it("Стейк «Томагавк»","16 990 ₸"),
+    it("Говяжие спагетти","6 990 ₸"),
+    it("Стейк «Лукум»","6 990 ₸"),
+    it("Стейк «Даллас»","12 990 ₸"),
+    it("Стейк «Нью-Йорк»","8 990 ₸"),
+    it("Стейк «Тибон»","12 990 ₸"),
+  ], note: "Все стейки подаются с запечённой картошкой, тушёным шпинатом с грибами и соусом демиглас"},
+  { cat: "Стейки из баранины", items: [
+    it("Перзола","6 990 ₸"),
+    it("Филе баранины","7 690 ₸"),
+    it("«Нью-Йорк» из баранины","6 190 ₸"),
+    it("Цельные бараньи рёбрышки","21 990 ₸"),
+    it("Перзола с шоу-подачей","23 990 ₸"),
+  ]},
+  { cat: "Рыба", items: [
+    it("Морской окунь","6 890 ₸"),
+    it("Дорадо","6 890 ₸"),
+    it("Сёмга","8 990 ₸"),
+  ]},
+  { cat: "Особые блюда", items: [
+    it("Конфит Перзола","14 990 ₸ / 2 чел · 27 990 ₸ / 4 чел"),
+    it("Асадо","17 990 ₸ / 2 рёбра · 34 990 ₸ / 4 рёбра · 51 490 ₸ / 6 рёбер"),
+  ]},
+  { cat: "Стейки в 24-каратном золоте", items: [
+    it("Hayalet Special","20 990 ₸ / на двоих · 39 990 ₸ / на 4 · 58 990 ₸ / на 6"),
+    it("Стейк «Даллас» золото","43 990 ₸"),
+    it("Стейк «Рибай» золото","38 990 ₸"),
+    it("Стейк «Томагавк» золото","48 990 ₸"),
+    it("Стейк из бонфиле золото","69 990 ₸"),
+  ]},
+  { cat: "Turkish Kebabs", items: [
+    it("Чокертме кебаб","6 490 ₸","Жареный картофель, йогурт, соус искандер, говядина, томатная паста"),
+    it("Чобан кавурма","5 490 ₸","Болгарский перец, лук, помидор, говядина"),
+    it("Перзола из баранины","5 390 ₸"),
+    it("Куриный чокертме","4 990 ₸","Жареный картофель, йогурт, куриный шашлык"),
+    it("Шехзаде из говядины","7 490 ₸"),
+    it("Касап искандер","4 690 ₸","Тырнак пиде, йогурт, помидорный соус, касап кёфте"),
+    it("Медальон из говядины","5 990 ₸","Картофельное пюре, крем-шпинат, бонфиле"),
+    it("Фирменное мясо шефа","6 990 ₸","Красный сладкий перец, лук, чеснок, бонфиле"),
+  ]},
+  { cat: "Кебабы и шашлыки", items: [
+    it("Hayalet-кебаб","6 990 ₸"),
+    it("Адана","4 290 ₸"),
+    it("Урфа","4 290 ₸"),
+    it("Алиназик","5 490 ₸","Турецкий йогурт с чесноком, моцарелла, баклажан"),
+    it("Бейти сарма","4 990 ₸","Лаваш, баклажан, моцарелла, говядина и баранина, соус искандер"),
+    it("Шашлык из баранины","5 490 ₸","Мелко нарезанный, петрушка, перец, помидор"),
+    it("Шашлык из курицы","4 090 ₸"),
+    it("Куриные крылышки","3 990 ₸"),
+    it("Куриная грудка","5 490 ₸"),
+    it("Ассорти-кебаб","13 990 ₸ / на двоих · 25 990 ₸ / на четверых · 51 990 ₸ / на шестерых"),
+  ], note: "Все кебабы и шашлыки подаются с булгуром и овощами на гриле"},
+  { cat: "Котлеты / кёфте", items: [
+    it("Касап кёфте","4 490 ₸"),
+    it("Уфо котлеты","7 490 ₸"),
+    it("Мини кёфте с сыром","4 990 ₸"),
+  ]},
+  { cat: "Пиде", items: [
+    it("Пиде с мясом кавурма","5 990 ₸"),
+    it("Пиде с сыром","4 190 ₸","Хрустящее пшеничное тесто, моцарелла"),
+    it("Пиде с мясом","4 190 ₸","Пшеничное тесто, говядина"),
+    it("Лахмаджун","3 190 ₸","Фарш, томатный соус, лук, петрушка, лимон"),
+    it("Трабзон пиде со шпинатом","4 490 ₸","Хрустящее тесто, шпинат, моцарелла"),
+    it("Hayalet пиде","5 990 ₸","Фарш, суджук, моцарелла, петрушка"),
+  ]},
+  { cat: "Паста", items: [
+    it("Арабьята","2 690 ₸","Пенне, томаты, острый перец, оливки"),
+    it("Пенне с мясом","3 390 ₸","Пенне, бонфиле, сливочный соус, лук, чеснок"),
+    it("Феттучини Альфредо","3 190 ₸","Сливочный соус, лук, куриное филе"),
+    it("Феттучини с креветками","5 490 ₸","Сливочный соус, лук, креветки, пармезан"),
+    it("Спагетти Болоньезе","4 390 ₸","Томатный соус, говяжий фарш, пармезан"),
+  ]},
+  { cat: "Пицца", items: [
+    it("Пицца четыре сыра","3 990 ₸","Рокфор, моцарелла, чеддер, пармезан"),
+    it("Маргарита","3 190 ₸","Моцарелла, базилик, томаты"),
+    it("Пицца с грибами","3 690 ₸","Грибы, моцарелла, тимьян"),
+    it("Пицца с мясом","3 990 ₸","Говядина, моцарелла, чеддер"),
+    it("Фирменная пицца Hayalet","3 990 ₸","Бастурма, суджук, томаты, моцарелла, сладкий перец"),
+    it("Пепперони","5 490 ₸","Моцарелла, говяжья колбаса, суджук"),
+  ]},
+  { cat: "Бургеры", items: [
+    it("Гамбургер","4 390 ₸","Котлета из говядины, солёные огурцы, помидоры"),
+    it("Чизбургер","4 590 ₸","Котлета из говядины, чеддер, солёные огурцы, помидоры"),
+    it("Лукум бургер","5 390 ₸","Вырезка на мангале, корнишоны, черри"),
+    it("Мини бургер","3 890 ₸","Котлета из говядины, помидор, салат"),
+    it("Микс тарелка для детей","3 190 ₸","Котлеты, сосиски, картофель фри"),
+    it("Асадо бургер","6 490 ₸","Салат, помидор, мясо асадо"),
+    it("Hayalet бургер","5 990 ₸","Фарш из говядины, фуа-гра, салат"),
+  ], note: "Все бургеры подаются с картофелем фри и соусами"},
+  { cat: "Десерты", items: [
+    it("Баклава с мороженым","2 990 ₸","Хавуч дилим"),
+    it("Чизкейк","3 190 ₸"),
+    it("Сутлач","1 490 ₸"),
+    it("Магнолия","2 490 ₸"),
+    it("Медовик","2 990 ₸"),
+    it("Сникерс","2 990 ₸"),
+    it("Прага","2 990 ₸"),
+    it("Наполеон","2 990 ₸"),
+    it("Милки Дрим","3 190 ₸"),
+    it("Фисташковый рулет","3 490 ₸"),
+    it("Мини-фруктовое ассорти","7 890 ₸"),
+    it("Фруктовое ассорти","11 990 ₸"),
+    it("Марочино","2 990 ₸"),
+    it("Испанский чизкейк","2 990 ₸"),
+    it("Кадайф классический","2 200 ₸ / 1 шт · 16 000 ₸ / 1 кг"),
+    it("Хавуч","3 190 ₸ / 1 шт · 18 000 ₸ / 1 кг"),
+    it("Молочная баклава","1 200 ₸ / 1 шт · 14 000 ₸ / 1 кг"),
+  ]},
+];
 
-            // Появление блоков
-            gsap.utils.toArray('.js-fade-up').forEach(el => {
-                gsap.from(el, {
-                    opacity: 0,
-                    y: 50,
-                    duration: 1,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: el,
-                        start: 'top 85%',
-                        toggleActions: 'play none none reverse'
-                    }
-                });
-            });
+const BAR = [
+  { cat: "Холодные напитки", items: [
+    it("Coca-Cola","990 ₸"), it("Fanta","990 ₸"), it("Sprite","990 ₸"), it("Schweppes","1 590 ₸"),
+    it("Натуральный сок","690 ₸ · 1 990 ₸"), it("Ayran","890 ₸ · 2 490 ₸"),
+    it("Red Bull","1 590 ₸"), it("Borjomi","1 690 ₸"),
+    it("Tassay","690 ₸ · 1 290 ₸"), it("Tassay Excellent","2 090 ₸"), it("Tassay Emerald","2 090 ₸"),
+    it("Ягодный морс","2 490 ₸"),
+  ]},
+  { cat: "Чай", items: [
+    it("Чай турецкий","490 ₸"), it("Чай чёрный","1 990 ₸"), it("Зелёный чай","1 990 ₸"),
+    it("Зелёный чай с жасмином","1 990 ₸"), it("Облепиховый чай","2 690 ₸"), it("Марокканский чай","2 690 ₸"),
+    it("Имбирный с ромашкой","2 490 ₸"), it("Ташкентский чай","2 290 ₸"), it("Фруктово-ягодный","1 990 ₸"),
+  ]},
+  { cat: "Кофе", items: [
+    it("Эспрессо","1 090 ₸"), it("Двойной эспрессо","1 490 ₸"), it("Американо","1 190 ₸"),
+    it("Капучино","1 390 ₸"), it("Латте","1 490 ₸"), it("Турецкий кофе","1 290 ₸"),
+    it("Iced латте","1 590 ₸"), it("Iced американо","1 490 ₸"),
+  ]},
+  { cat: "Лимонады", items: [
+    it("Лимонады в ассортименте","2 790 ₸"), it("Ягодный tix","2 990 ₸"), it("Турецкий лимонад","3 900 ₸"),
+  ]},
+  { cat: "Iced tea", items: [
+    it("Фруктовый","2 490 ₸"), it("Ягодный","2 490 ₸"), it("Гранатовый","2 490 ₸"), it("Персиковый","2 490 ₸"),
+  ]},
+  { cat: "Свежевыжатые соки", items: [
+    it("Фреш яблоко","1 590 ₸"), it("Фреш апельсиновый","1 790 ₸"), it("Фреш морковный","1 290 ₸"), it("Микс фреш","1 990 ₸"),
+  ]},
+  { cat: "Безалкогольные коктейли", items: [
+    it("Мохито классический","1 990 ₸"), it("Мохито клубничный","2 190 ₸"), it("Солнечный свет","1 990 ₸"),
+    it("Шмель","1 790 ₸"), it("Малиновый сбитень","2 190 ₸"), it("Яблочное наслаждение","2 490 ₸"), it("Пеликан","1 990 ₸"),
+  ]},
+  { cat: "Молочные коктейли и смузи", items: [
+    it("Милкшейк Oreo","2 490 ₸"), it("Милкшейк шоколадный","2 490 ₸"), it("Милкшейк клубничный","2 140 ₸"),
+    it("Милкшейк банановый","2 490 ₸"), it("Смузи в ассортименте","1 990 ₸"),
+  ]},
+  { cat: "Ирландский виски", items: [
+    it("Jameson Original","2 500 ₸"), it("Bushmills Original","2 600 ₸"), it("Bushmills Black","3 000 ₸"),
+  ]},
+  { cat: "Шотландский виски", items: [
+    it("Ballantines Finest","2 400 ₸"), it("Chivas Regal 12 YO","2 990 ₸"), it("Johnny Walker Black Label","3 200 ₸"),
+    it("Monkey Shoulder","3 400 ₸"), it("Glenlivet Founder's Reserve","4 200 ₸"), it("Glenfiddich 12 YO","4 900 ₸"),
+    it("Chivas Regal 15 YO","5 500 ₸"), it("Johnny Walker Gold Label","5 900 ₸"),
+  ]},
+  { cat: "Американский виски", items: [
+    it("Jim Beam Double Oak","2 300 ₸"), it("Jim Beam Apple","2 300 ₸"), it("Jim Beam Honey","2 300 ₸"),
+    it("Jack Daniel's","2 600 ₸"), it("Jack Daniel's Gentlemen Jack","3 100 ₸"),
+  ]},
+  { cat: "Коньяк и бренди", items: [
+    it("Ararat 5 yo","2 500 ₸"), it("Ararat 7 yo","2 900 ₸"), it("Martell VS","3 200 ₸"),
+    it("Martell VSOP","4 900 ₸"), it("Martell XO","15 000 ₸"),
+  ], note: "Порция 50 мл"},
+  { cat: "Водка", items: [
+    it("Finlandia","2 100 ₸"), it("Absolut","2 200 ₸"), it("Русский Стандарт Gold","2 300 ₸"),
+    it("Русский Стандарт Платинум","2 400 ₸"), it("Reyka","2 600 ₸"), it("Wyborowa","2 000 ₸"),
+    it("Titos Handmade","2 800 ₸"), it("Ciroc","3 200 ₸"), it("Beluga Noble","3 700 ₸"),
+  ], note: "Порция 50 мл"},
+  { cat: "Ликёр", items: [
+    it("Jagermeister","2 200 ₸"), it("Bailey's","2 200 ₸"), it("Cointreau","2 200 ₸"),
+  ], note: "Порция 50 мл"},
+  { cat: "Джин", items: [
+    it("Beefeater Blue Orange","2 200 ₸"), it("Barrister Pink Strawberry","2 200 ₸"), it("Beefeater Black Berry","2 200 ₸"),
+    it("Beefeater London Dry","2 200 ₸"), it("ROKU Japan Gin","3 300 ₸"), it("Hendrick's","3 900 ₸"), it("Monkey 47","5 500 ₸"),
+  ], note: "Порция 50 мл"},
+  { cat: "Текила", items: [
+    it("Olmeca Gold","2 100 ₸"), it("Olmeca Silver","2 200 ₸"), it("Olmeca Altos","2 500 ₸"),
+    it("Espolon Blanco","2 900 ₸"), it("Patron Silver","3 700 ₸"), it("Patron Anejo","3 900 ₸"),
+  ], note: "Порция 50 мл"},
+  { cat: "Ром", items: [
+    it("Bacardi Carta Blanca","2 200 ₸"), it("Bacardi Carta Negra","2 300 ₸"), it("Bacardi Spiced","2 300 ₸"),
+    it("Havana Club White","2 100 ₸"), it("Havana Club Especial","2 100 ₸"), it("Havana Club Dark 7 YO","2 200 ₸"),
+  ], note: "Порция 50 мл"},
+  { cat: "Алкогольные коктейли", items: [
+    it("Mojito","3 000 ₸","Bacardi, strawberry, blackberry"), it("Gin Tonic","2 900 ₸"), it("Whiskey Sour","3 000 ₸"),
+    it("Cosmopolitan","3 000 ₸"), it("Aperol Spritz","3 000 ₸"), it("Long Island","3 100 ₸"),
+    it("Negroni","3 100 ₸"), it("Tequila Sunrise","3 100 ₸"),
+  ]},
+  { cat: "Türk rakısı", items: [
+    it("Yeni Raki","3 000 ₸"), it("Tekirdağ Gold","3 900 ₸"), it("Beylerbeyi Göbek","4 200 ₸"),
+  ]},
+  { cat: "Бутылочное пиво", items: [
+    it("Budweiser Non Alcohol 0.33","2 500 ₸"), it("Heineken 0.5","2 500 ₸"), it("Estrella 0.33","2 600 ₸"),
+    it("Corona Extra 0.33","2 800 ₸"), it("Paulaner Weissbier 0.5","3 100 ₸"), it("Paulaner Munchner 0.5","3 100 ₸"),
+    it("Budweiser 0.5","3 100 ₸"),
+  ]},
+  { cat: "Вермут", items: [
+    it("Martini Bianco","1 800 ₸"), it("Martini Rosso","1 800 ₸"), it("Martini Fiero","1 800 ₸"),
+    it("Redbull","1 590 ₸"), it("Schweppes Tonic","1 600 ₸"),
+  ], note: "Порция 100 мл"},
+];
 
-            gsap.from('.js-reveal-left', {
-                opacity: 0,
-                x: -60,
-                duration: 1.2,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: '.js-reveal-left',
-                    start: 'top 80%'
-                }
-            });
+const WINE = [
+  { cat: "Шампанское и игристое", items: [
+    it("Rose IL Fresco, Villa Sandi, Brut","25 000 ₸"),
+    it("Prosecco IL Fresco, Villa Sandi, Brut","27 000 ₸"),
+    it("Prosecco, Valdobbiadene, Villa Sandi, Extra Dry","29 000 ₸"),
+    it("Drappier, «Carte d'Or», Brut","85 000 ₸"),
+    it("Drappier, Rosé de Saignée, Brut","95 000 ₸"),
+  ]},
+  { cat: "Белое вино", items: [
+    it("Pinot Grigio «Vivolo di Sasso», Italy","3 200 ₸ · 14 000 ₸"),
+    it("Chardonnay, Les Jamelles, Languedoc, France","4 500 ₸ · 20 000 ₸"),
+    it("Riesling, Dr. Loosen, Mosel, Germany (алк. 0%)","23 000 ₸"),
+    it("Semi Dulce, Baron de Ley, Rioja, Spain","27 000 ₸"),
+    it("Sauvignon Blanc, Marlborough Sun, New Zealand","29 000 ₸"),
+    it("Urban Riesling, La Scolca, Piemonte, Italy","39 000 ₸"),
+  ]},
+  { cat: "Розовое вино", items: [
+    it("Clair de Rose, Les Jamelles, Languedoc, France","3 950 ₸ · 19 000 ₸"),
+  ]},
+  { cat: "Красное вино", items: [
+    it("Allegre, Sangiovese, Cielo e Terra, Italy (semi sweet)","3 400 ₸ · 17 000 ₸"),
+    it("Shiraz «Beats the Devil», Taster Wine, Australia","3 900 ₸ · 19 000 ₸"),
+    it("Primitivo «Alternativa», Doppio Passo, Puglia (алк. 0%)","23 000 ₸"),
+    it("Pinot Noir, Les Jamelles, Languedoc, France","24 000 ₸"),
+    it("Primitivo, Doppio Passo, Puglia, Italy","25 000 ₸"),
+    it("Club Privado, Baron de Ley, Rioja, Spain","25 000 ₸"),
+    it("Zinfandel «Think Big!», California, USA (semi dry)","39 000 ₸"),
+    it("Comte de Dauzac, Bordeaux, France","39 000 ₸"),
+    it("Carmenere Grand Reserve, Los Boldos, Chile","39 000 ₸"),
+    it("Borgo del Mandorlo, Puglia, Italy","47 000 ₸"),
+    it("Museum Reserva, Finca Museum, Cigales, Spain","58 000 ₸"),
+    it("Le Difese, Tenuta San Guido, Toscana, Italy","70 000 ₸"),
+    it("Cabernet Sauvignon «Vintner's Reserve», Kendall-Jackson, USA","78 000 ₸"),
+  ]},
+];
 
-            gsap.from('.js-reveal-right', {
-                opacity: 0,
-                x: 60,
-                duration: 1.2,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: '.js-reveal-right',
-                    start: 'top 80%'
-                }
-            });
-        });
+/* =========================================================
+   RENDER MENU
+========================================================= */
+function slug(s){ return s.toLowerCase().replace(/[^a-zа-я0-9]+/gi,'-'); }
 
-        // 5. Логика переключения категорий меню
-        function switchMenu(category) {
-            // Деактивация всех вкладок
-            document.querySelectorAll('.menu-tab-btn').forEach(btn => btn.classList.remove('active'));
-            // Скрытие всех категорий
-            document.querySelectorAll('.menu-category-content').forEach(content => {
-                content.classList.add('hidden');
-                content.style.opacity = '0';
-            });
+function renderPanel(data, pillsId, catsId, prefix){
+  const pillsEl = document.getElementById(pillsId);
+  const catsEl = document.getElementById(catsId);
+  data.forEach((group, i) => {
+    const id = prefix + '-' + slug(group.cat);
+    const pill = document.createElement('button');
+    pill.className = 'pill border border-bone/20 text-bone/70 text-[11px] tracking-[0.06em] uppercase px-4 py-2 whitespace-nowrap transition-colors';
+    pill.textContent = group.cat;
+    pill.dataset.target = id;
+    pill.dataset.active = i === 0 ? 'true' : 'false';
+    pillsEl.appendChild(pill);
 
-            // Активация выбранной
-            const activeBtn = document.getElementById(`btn-${category}`);
-            const activeCat = document.getElementById(`cat-${category}`);
-            
-            if (activeBtn && activeCat) {
-                activeBtn.classList.add('active');
-                activeCat.classList.remove('hidden');
-                
-                // Красивое проявление через GSAP
-                gsap.to(activeCat, {
-                    opacity: 1,
-                    duration: 0.5,
-                    ease: 'power2.out'
-                });
-            }
-        }
-    </script>
+    const block = document.createElement('div');
+    block.id = id;
+    block.className = 'mb-16 scroll-mt-40 cat-block';
+    let html = `<h3 class="font-display text-xl md:text-2xl text-gold mb-2">${group.cat}</h3>`;
+    if(group.note){ html += `<p class="font-accent italic text-bone/45 text-sm mb-6">${group.note}</p>`; }
+    else { html += `<div class="mb-6"></div>`; }
+    html += `<div class="grid md:grid-cols-2 gap-x-12">`;
+    group.items.forEach(item => {
+      html += `
+        <div class="menu-item py-4 flex justify-between items-start gap-6 reveal-item">
+          <div>
+            <p class="text-bone font-medium">${item.n}</p>
+            ${item.d ? `<p class="text-bone/45 text-[13px] mt-1 leading-snug">${item.d}</p>` : ''}
+          </div>
+          <p class="font-accent italic text-gold text-lg whitespace-nowrap shrink-0">${item.p}</p>
+        </div>`;
+    });
+    html += `</div>`;
+    block.innerHTML = html;
+    catsEl.appendChild(block);
+  });
+
+  pillsEl.addEventListener('click', (e) => {
+    const btn = e.target.closest('.pill');
+    if(!btn) return;
+    [...pillsEl.children].forEach(p => p.dataset.active = 'false');
+    btn.dataset.active = 'true';
+    const target = document.getElementById(btn.dataset.target);
+    const y = target.getBoundingClientRect().top + window.scrollY - 150;
+    if(window.__lenis){ window.__lenis.scrollTo(y, {duration: 1.1}); } else { window.scrollTo({top:y, behavior:'smooth'}); }
+  });
+}
+
+renderPanel(FOOD, 'pills-food', 'cats-food', 'food');
+renderPanel(BAR, 'pills-bar', 'cats-bar', 'bar');
+renderPanel(WINE, 'pills-wine', 'cats-wine', 'wine');
+
+/* top-level tab switching */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.dataset.active = 'false');
+    btn.dataset.active = 'true';
+    const tab = btn.dataset.tab;
+    ['food','bar','wine'].forEach(t => {
+      document.getElementById('panel-'+t).dataset.hidden = (t === tab) ? 'false' : 'true';
+    });
+    ScrollTrigger.refresh();
+  });
+});
+
+/* marquee content */
+const marqueeText = "МРАМОРНАЯ ГОВЯДИНА &nbsp;·&nbsp; ОГОНЬ МАНГАЛА &nbsp;·&nbsp; ЗОЛОТОЙ ЛИСТ &nbsp;·&nbsp; ТУРЕЦКОЕ ГОСТЕПРИИМСТВО &nbsp;·&nbsp; HAYALET &nbsp;·&nbsp; ";
+function fillMarquee(id, cls){
+  const el = document.getElementById(id);
+  el.style.whiteSpace = 'nowrap';
+  el.innerHTML = `<span class="font-display text-lg md:text-xl ${cls} px-4">${marqueeText.repeat(8)}</span>`;
+}
+fillMarquee('marquee-1','text-char');
+fillMarquee('marquee-2','text-char');
+
+/* =========================================================
+   GSAP / LENIS / SCROLLTRIGGER / SPLITTYPE
+========================================================= */
+gsap.registerPlugin(ScrollTrigger);
+
+// Lenis smooth scroll
+const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+window.__lenis = lenis;
+function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time)=>{ lenis.raf(time*1000); });
+gsap.ticker.lagSmoothing(0);
+
+// Preloader
+window.addEventListener('load', () => {
+  gsap.timeline()
+    .to('#preloader-logo', {scale:1.08, duration:.6, ease:'power2.out'})
+    .to('#preloader', {opacity:0, duration:.6, ease:'power2.inOut', onComplete:()=>{ document.getElementById('preloader').style.display='none'; }}, '-=.1')
+    .add(heroIn, '-=.3');
+});
+
+// Hero split-text entrance
+function heroIn(){
+  const l1 = new SplitType('#hero-line-1', {types:'chars'});
+  const l2 = new SplitType('#hero-line-2', {types:'chars'});
+  gsap.set([...l1.chars, ...l2.chars], {display:'inline-block'});
+  const tl = gsap.timeline();
+  tl.to('.hero-eyebrow', {opacity:1, y:0, duration:.6, ease:'power2.out'})
+    .from(l1.chars, {yPercent:120, opacity:0, rotateZ:6, stagger:.028, duration:.9, ease:'power4.out'}, '-=.2')
+    .from(l2.chars, {yPercent:120, opacity:0, rotateZ:6, stagger:.02, duration:.8, ease:'power4.out'}, '-=.55')
+    .to('.hero-sub', {opacity:1, y:0, duration:.7, ease:'power2.out'}, '-=.35')
+    .to('.hero-cta', {opacity:1, y:0, duration:.7, ease:'power2.out'}, '-=.45');
+}
+gsap.set('.hero-eyebrow', {y:14});
+gsap.set('.hero-sub', {y:16});
+gsap.set('.hero-cta', {y:16});
+
+// hero parallax image + scroll progress line
+gsap.to('#hero-img', {
+  yPercent: 14, ease:'none',
+  scrollTrigger: { trigger:'#top', start:'top top', end:'bottom top', scrub:true }
+});
+gsap.to('#scroll-line', {
+  top:'66%', ease:'none',
+  scrollTrigger: { trigger:'#top', start:'top top', end:'bottom top', scrub:true }
+});
+
+// nav shrink on scroll
+ScrollTrigger.create({
+  start: 80, end: 99999,
+  onUpdate: (self) => {
+    const nav = document.getElementById('site-nav');
+    if(self.scroll() > 80){ nav.classList.add('bg-char/90','backdrop-blur','border-b','border-gold/10'); }
+    else { nav.classList.remove('bg-char/90','backdrop-blur','border-b','border-gold/10'); }
+  }
+});
+
+// generic reveal-up
+gsap.utils.toArray('.reveal-up').forEach(el => {
+  gsap.from(el, {
+    opacity:0, y:40, duration:.9, ease:'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 85%' }
+  });
+});
+
+// gallery parallax
+gsap.utils.toArray('.parallax-img img').forEach((img, i) => {
+  gsap.fromTo(img, {yPercent: -8}, {
+    yPercent: 8, ease:'none',
+    scrollTrigger: { trigger: img, start:'top bottom', end:'bottom top', scrub:true }
+  });
+});
+
+// menu items stagger reveal (batch, since injected dynamically)
+ScrollTrigger.batch('.reveal-item', {
+  start: 'top 92%',
+  onEnter: batch => gsap.from(batch, {opacity:0, y:18, stagger:.05, duration:.6, ease:'power2.out', overwrite:true}),
+  once: true
+});
+ScrollTrigger.batch('.cat-block', {
+  start: 'top 90%',
+  onEnter: batch => gsap.from(batch, {opacity:0, y:24, stagger:.08, duration:.7, ease:'power2.out', overwrite:true}),
+  once: true
+});
+
+// marquee infinite scroll via GSAP
+function loopMarquee(id, dir){
+  const el = document.getElementById(id);
+  gsap.to(el, { xPercent: dir, duration: 22, ease:'none', repeat:-1 });
+}
+requestAnimationFrame(() => {
+  loopMarquee('marquee-1', -50);
+  loopMarquee('marquee-2', -50);
+  ScrollTrigger.refresh();
+});
+
+window.addEventListener('resize', () => ScrollTrigger.refresh());
+</script>
 </body>
 </html>
