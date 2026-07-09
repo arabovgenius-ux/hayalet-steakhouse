@@ -3,862 +3,1021 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hayalet Steak House — Almaty</title>
-<meta name="description" content="Hayalet Steak House — стейки на углях, турецкое гостеприимство, Алматы.">
+<title>Hayalet Steak House — стейк-хаус в Алматы</title>
+<meta name="description" content="Hayalet Steak House — местное фермерское мясо и турецкая душа. Стейки на углях, турецкий завтрак, полное меню и бронирование в Алматы.">
 
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
+<meta property="og:title" content="Hayalet Steak House — стейк-хаус в Алматы">
+<meta property="og:description" content="Местное фермерское мясо и турецкая душа. Стейки на углях, турецкий завтрак, полное меню.">
+<meta property="og:image" content="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4493.jpeg">
 
-<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-<!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<!-- Lenis smooth scroll -->
-<script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
-<!-- Barba.js (single-page app, included per spec) -->
-<script src="https://unpkg.com/@barba/core"></script>
-<!-- SplitType -->
-<script src="https://unpkg.com/split-type"></script>
+<link rel="icon" href="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4507%20%28%D1%84%D0%BE%D0%BD%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%29.png">
 
+<script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
     theme: {
       extend: {
         colors: {
-          char:    '#0b0a08',
-          terra:   '#171310',
-          terra2:  '#1e1712',
-          ember:   '#c1401c',
-          emberlt: '#e0642f',
-          gold:    '#d4a544',
-          goldlt:  '#e8c67a',
-          bone:    '#ede6d6',
-          smoke:   '#8a8074',
+          ink: '#14100c',
+          surface: '#1c1712',
+          surface2: '#241d16',
+          hairline: 'rgba(201,166,107,0.16)',
+          gold: { DEFAULT: '#c9a35b', bright: '#e8c179', dim: '#8a703e' },
+          ember: '#b5502c',
+          cream: '#f1e8d9',
+          stone: { DEFAULT: '#a99c8c', dim: '#6f6459' },
         },
         fontFamily: {
-          display: ['Unbounded', 'sans-serif'],
-          body: ['Manrope', 'sans-serif'],
+          display: ['"Unbounded"', 'sans-serif'],
           accent: ['"Cormorant Garamond"', 'serif'],
+          body: ['"Manrope"', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'monospace'],
         },
       }
     }
   }
 </script>
 
+<!-- GSAP core + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis smooth scroll -->
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+<!-- SplitType for letter animation -->
+<script src="https://unpkg.com/split-type"></script>
+<!-- Barba.js is included per request. This page is intentionally a single scrolling
+     document (all content, including the full menu, lives on one page), so there are
+     no separate routes for Barba to transition between. The script is loaded and left
+     ready to use if the site is ever split into multiple pages, but it is not
+     initialized here to avoid a no-op / console warning. -->
+<script src="https://unpkg.com/@barba/core"></script>
+
 <style>
-  html { background: #0b0a08; }
+  ::selection { background: #c9a35b; color: #14100c; }
+  html { scroll-behavior: auto; }
   body {
-    background-color: #0b0a08;
-    color: #ede6d6;
+    background-color: #14100c;
+    color: #f1e8d9;
     font-family: 'Manrope', sans-serif;
     overflow-x: hidden;
-    cursor: default;
   }
-  ::selection { background: #c1401c; color: #ede6d6; }
 
-  ::-webkit-scrollbar { width: 9px; }
-  ::-webkit-scrollbar-track { background: #0b0a08; }
-  ::-webkit-scrollbar-thumb { background: #3a3128; border-radius: 0; }
-  ::-webkit-scrollbar-thumb:hover { background: #c1401c; }
-
-  a, button { -webkit-tap-highlight-color: transparent; }
-  :focus-visible { outline: 2px solid #d4a544; outline-offset: 3px; }
-
-  /* film grain overlay */
+  /* grain texture overlay */
   .grain {
-    position: fixed; inset: 0; z-index: 60; pointer-events: none;
-    opacity: .05; mix-blend-mode: overlay;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  .hairline { background: linear-gradient(90deg, transparent, rgba(212,165,68,.5), transparent); height: 1px; }
+  .container-x { max-width: 1280px; margin-left: auto; margin-right: auto; padding-left: 1.5rem; padding-right: 1.5rem; }
+  @media (min-width:768px){ .container-x{ padding-left: 2.5rem; padding-right: 2.5rem; } }
 
-  .split-word { display: inline-block; will-change: transform, opacity; }
-  .char { display: inline-block; will-change: transform, opacity; }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: #c9a35b;
+  }
 
-  .nav-link { position: relative; }
+  .btn-gold {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: linear-gradient(135deg,#e8c179,#c9a35b 60%,#a9803f);
+    color: #14100c;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    padding: 0.9rem 1.7rem;
+    border-radius: 999px;
+    letter-spacing: 0.01em;
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+    box-shadow: 0 8px 24px -8px rgba(201,163,91,0.45);
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -10px rgba(201,163,91,0.6); }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    border: 1px solid rgba(241,232,217,0.28);
+    color: #f1e8d9;
+    font-weight: 600;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    transition: border-color .3s ease, background-color .3s ease, transform .35s ease;
+  }
+  .btn-ghost:hover { border-color: #c9a35b; background: rgba(201,163,91,0.08); transform: translateY(-2px); }
+
+  .hairline-b { border-bottom: 1px solid rgba(201,166,107,0.16); }
+  .hairline-t { border-top: 1px solid rgba(201,166,107,0.16); }
+
+  /* nav */
+  #site-nav { transition: background-color .4s ease, border-color .4s ease, backdrop-filter .4s ease; }
+  #site-nav.scrolled { background-color: rgba(20,16,12,0.86); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(201,166,107,0.16); }
+
+  .nav-link { position: relative; color: #a99c8c; font-weight: 500; font-size: 0.92rem; transition: color .3s ease; }
+  .nav-link:hover { color: #f1e8d9; }
   .nav-link::after {
-    content: ''; position: absolute; left: 0; bottom: -4px; width: 0; height: 1px;
-    background: #d4a544; transition: width .35s ease;
+    content: ''; position: absolute; left:0; right:0; bottom:-6px; height:1px;
+    background: #c9a35b; transform: scaleX(0); transform-origin: left; transition: transform .35s ease;
   }
-  .nav-link:hover::after { width: 100%; }
+  .nav-link:hover::after { transform: scaleX(1); }
 
-  .tab-btn[data-active="true"] {
-    background: #c1401c; color: #ede6d6; border-color: #c1401c;
+  /* marquee */
+  .marquee-track { display:flex; width:max-content; animation: marquee 32s linear infinite; }
+  .marquee-track span { white-space: nowrap; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* hero title */
+  #hero-title { line-height: 0.86; }
+  #hero-title .char { display: inline-block; will-change: transform, opacity; }
+
+  /* gallery */
+  .gal-item { overflow: hidden; position: relative; }
+  .gal-item img { transition: transform 1.1s cubic-bezier(.2,.8,.2,1), filter .6s ease; }
+  .gal-item:hover img { transform: scale(1.08); }
+  .gal-item::after {
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(20,16,12,0) 40%, rgba(20,16,12,0.75) 100%);
+    pointer-events: none;
   }
-  .pill[data-active="true"] {
-    background: #d4a544; color: #0b0a08; border-color: #d4a544;
+
+  /* accordion */
+  .cat-panel { height: 0; overflow: hidden; }
+  .cat-chevron { transition: transform .4s ease; }
+  .cat-header.is-open .cat-chevron { transform: rotate(180deg); }
+  .cat-header { cursor: pointer; }
+
+  .menu-tab { color:#a99c8c; font-weight:600; padding: 0.6rem 1.1rem; border-radius: 999px; border:1px solid transparent; transition: all .3s ease; font-size:0.92rem;}
+  .menu-tab.active { color:#14100c; background:#c9a35b; }
+  .menu-tab:not(.active):hover { border-color: rgba(201,166,107,0.35); color:#f1e8d9; }
+
+  .dish-row { border-bottom: 1px solid rgba(201,166,107,0.1); }
+  .dish-row:last-child { border-bottom: none; }
+
+  .price-tag { font-family:'IBM Plex Mono', monospace; color:#e8c179; font-weight:500; white-space:nowrap; }
+
+  input[type="text"]::placeholder { color: #6f6459; }
+  input[type="text"]:focus { outline: none; }
+
+  :focus-visible { outline: 2px solid #c9a35b; outline-offset: 3px; }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #14100c; }
+  ::-webkit-scrollbar-thumb { background: #3a2f22; border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: #5a4830; }
+
+  .gold-underline { position:relative; display:inline-block; }
+  .gold-underline::after {
+    content:''; position:absolute; left:0; right:0; bottom:-0.15em; height:0.11em;
+    background: linear-gradient(90deg,#8a703e,#e8c179);
+    opacity:0.7;
   }
-
-  .menu-item { border-bottom: 1px solid rgba(212,165,68,.14); }
-  .menu-item:last-child { border-bottom: none; }
-
-  .marquee-track { display: flex; width: max-content; }
-
-  .glow-btn { box-shadow: 0 0 0 rgba(193,64,28,0); transition: box-shadow .4s ease, transform .3s ease; }
-  .glow-btn:hover { box-shadow: 0 0 34px rgba(193,64,28,.55); transform: translateY(-2px); }
-
-  .fig { overflow: hidden; }
-  .fig img { transition: transform 1.1s cubic-bezier(.16,1,.3,1); }
-  .fig:hover img { transform: scale(1.06); }
-
-  .reveal-panel[data-hidden="true"] { display: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
   }
 </style>
 </head>
-<body class="antialiased">
 
+<body class="bg-ink text-cream font-body antialiased">
 <div class="grain"></div>
 
-<!-- PRELOADER -->
-<div id="preloader" class="fixed inset-0 z-[100] bg-char flex items-center justify-center">
-  <div class="text-center">
-    <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4507%20%28%D1%84%D0%BE%D0%BD%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%29.png"
-         alt="Hayalet" class="w-20 h-20 mx-auto mb-4 opacity-90" id="preloader-logo"
-         onerror="this.style.display='none'">
-    <p class="font-display text-[11px] tracking-[0.4em] text-gold uppercase">Hayalet</p>
-  </div>
-</div>
-
-<!-- NAV -->
-<header id="site-nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-500">
-  <nav class="max-w-[1400px] mx-auto flex items-center justify-between px-6 md:px-10 py-5">
-    <a href="#top" class="flex items-center gap-3">
-      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4507%20%28%D1%84%D0%BE%D0%BD%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%29.png"
-           alt="Hayalet Steak House" class="h-9 w-9 object-contain" onerror="this.style.display='none'">
-      <span class="font-display text-sm md:text-base tracking-[0.2em] text-bone">HAYALET</span>
+<!-- ============ NAV ============ -->
+<header id="site-nav" class="fixed top-0 inset-x-0 z-50">
+  <div class="container-x flex items-center justify-between py-4">
+    <a href="#home" class="flex items-center gap-3">
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4507%20%28%D1%84%D0%BE%D0%BD%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%29.png" alt="Hayalet Steak House" class="h-10 w-10 rounded-full object-cover">
+      <span class="font-display font-semibold tracking-wide text-cream text-sm md:text-base">HAYALET</span>
     </a>
-    <div class="hidden md:flex items-center gap-9 text-[13px] tracking-[0.08em] uppercase text-bone/80">
+
+    <nav class="hidden md:flex items-center gap-9">
       <a href="#about" class="nav-link">О нас</a>
-      <a href="#gallery" class="nav-link">Атмосфера</a>
+      <a href="#signature" class="nav-link">24К стейки</a>
       <a href="#menu" class="nav-link">Меню</a>
+      <a href="#gallery" class="nav-link">Атмосфера</a>
       <a href="#contact" class="nav-link">Контакты</a>
-    </div>
-    <a href="https://wa.me/77010777756" target="_blank" rel="noopener"
-       class="glow-btn hidden sm:inline-flex items-center gap-2 border border-gold/60 text-gold text-[12px] tracking-[0.1em] uppercase px-5 py-2.5">
+    </nav>
+
+    <a href="https://wa.me/77010777756" target="_blank" rel="noopener noreferrer" class="hidden md:inline-flex btn-gold text-sm">
       Забронировать
     </a>
-  </nav>
+
+    <button id="burger" aria-label="Открыть меню" class="md:hidden text-cream">
+      <svg id="burger-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="hidden md:hidden bg-ink/98 border-t border-hairline">
+    <div class="container-x py-6 flex flex-col gap-5">
+      <a href="#about" class="nav-link mobile-link">О нас</a>
+      <a href="#signature" class="nav-link mobile-link">24К стейки</a>
+      <a href="#menu" class="nav-link mobile-link">Меню</a>
+      <a href="#gallery" class="nav-link mobile-link">Атмосфера</a>
+      <a href="#contact" class="nav-link mobile-link">Контакты</a>
+      <a href="https://wa.me/77010777756" target="_blank" rel="noopener noreferrer" class="btn-gold justify-center mt-2">Забронировать</a>
+    </div>
+  </div>
 </header>
 
-<!-- HERO -->
-<section id="top" class="relative min-h-[100svh] flex items-end overflow-hidden">
+<!-- ============ HERO ============ -->
+<section id="home" class="relative min-h-[100svh] flex flex-col justify-end overflow-hidden">
   <div class="absolute inset-0">
-    <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4493.jpeg"
-         alt="Стейк Hayalet в золотом листе" class="w-full h-full object-cover object-center scale-110" id="hero-img"
-         onerror="this.parentElement.style.background='linear-gradient(160deg,#171310,#0b0a08)'">
-    <div class="absolute inset-0 bg-gradient-to-t from-char via-char/70 to-char/30"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-char/80 via-transparent to-char/40"></div>
+    <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4496.jpeg" alt="Огненная подача в Hayalet Steak House" class="w-full h-full object-cover" id="hero-bg">
+    <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(20,16,12,0.55) 0%, rgba(20,16,12,0.55) 40%, rgba(20,16,12,0.96) 100%);"></div>
+    <div class="absolute inset-0" style="background:radial-gradient(ellipse at center, rgba(20,16,12,0.15) 0%, rgba(20,16,12,0.75) 100%);"></div>
   </div>
 
-  <div class="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-10 pb-16 md:pb-20 pt-40">
-    <p class="hero-eyebrow font-body text-[12px] md:text-[13px] tracking-[0.5em] uppercase text-gold mb-6 opacity-0">
-      Алматы · Мясо и огонь
-    </p>
-    <h1 class="font-display leading-[0.92] text-bone">
-      <span class="block text-[15vw] sm:text-[11vw] md:text-[8vw] lg:text-[7.2vw]" id="hero-line-1">HAYALET</span>
-      <span class="block text-[9vw] sm:text-[6.5vw] md:text-[4.4vw] lg:text-[3.8vw] text-ember" id="hero-line-2">STEAK HOUSE</span>
-    </h1>
-    <p class="hero-sub font-accent italic text-xl md:text-2xl text-bone/70 mt-8 max-w-lg opacity-0">
-      Мясо, выдержанное на углях. Гостеприимство, выдержанное во времени.
-    </p>
-    <div class="hero-cta flex flex-wrap gap-4 mt-10 opacity-0">
-      <a href="#menu" class="glow-btn bg-ember text-bone font-body font-semibold text-[13px] tracking-[0.08em] uppercase px-8 py-4">
-        Смотреть меню
+  <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4507%20%28%D1%84%D0%BE%D0%BD%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%29.png" alt="" aria-hidden="true" id="hero-logo-mark" class="pointer-events-none select-none absolute right-[-8%] top-[8%] w-[60vw] max-w-[560px] opacity-[0.09]">
+
+  <div class="relative container-x pb-16 md:pb-20 pt-40">
+    <p class="eyebrow mb-6" data-hero>СТЕЙК-ХАУС · АЛМАТЫ · 09:00 — 01:00</p>
+    <h1 id="hero-title" class="font-display font-black text-cream text-[16vw] md:text-[9vw] leading-none tracking-tight">HAYALET</h1>
+    <p class="font-accent italic text-2xl md:text-4xl text-gold-bright mt-6 max-w-2xl" data-hero style="color:#e8c179;">Местное фермерское мясо и турецкая душа</p>
+    <p class="text-stone max-w-xl mt-5 text-base md:text-lg" data-hero>Мясо созревает на открытых углях, а стол накрывают по турецким традициям — с мезе, лавашом и чаем, который не успевает остыть.</p>
+
+    <div class="flex flex-wrap gap-4 mt-9" data-hero>
+      <a href="https://wa.me/77010777756" target="_blank" rel="noopener noreferrer" class="btn-gold">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2.02 6.48 2.02 12c0 1.85.5 3.58 1.36 5.07L2 22l5.06-1.33A9.94 9.94 0 0 0 12.02 22C17.54 22 22 17.52 22 12S17.54 2 12.02 2zm0 18.06c-1.6 0-3.1-.43-4.4-1.19l-.32-.19-3.01.79.8-2.93-.2-.3a8.02 8.02 0 0 1-1.25-4.24c0-4.46 3.63-8.08 8.09-8.08 4.46 0 8.08 3.62 8.08 8.08 0 4.46-3.62 8.06-8.08 8.06zm4.44-6.05c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.55.12-.16.24-.63.78-.77.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.32-.75-1.81-.2-.48-.4-.41-.55-.42-.14-.01-.3-.01-.46-.01-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.13 3.64.58.25 1.03.4 1.38.51.58.18 1.1.16 1.52.1.46-.07 1.43-.58 1.63-1.15.2-.57.2-1.05.14-1.15-.06-.1-.22-.16-.46-.28z"/></svg>
+        Забронировать в WhatsApp
       </a>
-      <a href="https://wa.me/77010777756" target="_blank" rel="noopener"
-         class="border border-bone/30 text-bone font-body text-[13px] tracking-[0.08em] uppercase px-8 py-4 hover:border-gold hover:text-gold transition-colors">
-        Столик в WhatsApp
-      </a>
+      <a href="#menu" class="btn-ghost">Смотреть меню</a>
     </div>
   </div>
 
-  <div class="absolute right-6 md:right-10 bottom-10 z-10 hidden sm:flex flex-col items-center gap-3">
-    <span class="text-[10px] tracking-[0.35em] uppercase text-bone/50 rotate-180" style="writing-mode: vertical-rl;">Scroll</span>
-    <div class="w-px h-16 bg-bone/20 relative overflow-hidden">
-      <div id="scroll-line" class="absolute top-0 left-0 w-full h-1/3 bg-gold"></div>
-    </div>
-  </div>
+  <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-stone" aria-label="Прокрутить вниз">
+    <span class="eyebrow" style="font-size:0.62rem;">СКРОЛЛ</span>
+    <span class="w-px h-10 bg-gold/60 relative overflow-hidden"><span class="absolute inset-x-0 top-0 h-3 bg-gold-bright animate-pulse"></span></span>
+  </a>
 </section>
 
-<!-- MARQUEE 1 -->
-<div class="relative bg-gold py-4 -rotate-1 -mt-6 md:-mt-8 z-20 overflow-hidden">
-  <div class="marquee-track" id="marquee-1"></div>
+<!-- ============ MARQUEE ============ -->
+<div class="hairline-t hairline-b py-5 bg-surface overflow-hidden">
+  <div class="marquee-track font-display text-sm md:text-base tracking-widest text-stone">
+    <span class="flex items-center gap-6 pr-6">
+      <span>МЕСТНОЕ ФЕРМЕРСКОЕ МЯСО</span><span class="text-gold">•</span>
+      <span>ТУРЕЦКАЯ ДУША</span><span class="text-gold">•</span>
+      <span>ОГОНЬ И УГОЛЬ</span><span class="text-gold">•</span>
+      <span>24К ЗОЛОТО</span><span class="text-gold">•</span>
+      <span>HAYALET STEAK HOUSE</span><span class="text-gold">•</span>
+    </span>
+    <span class="flex items-center gap-6 pr-6" aria-hidden="true">
+      <span>МЕСТНОЕ ФЕРМЕРСКОЕ МЯСО</span><span class="text-gold">•</span>
+      <span>ТУРЕЦКАЯ ДУША</span><span class="text-gold">•</span>
+      <span>ОГОНЬ И УГОЛЬ</span><span class="text-gold">•</span>
+      <span>24К ЗОЛОТО</span><span class="text-gold">•</span>
+      <span>HAYALET STEAK HOUSE</span><span class="text-gold">•</span>
+    </span>
+  </div>
 </div>
 
-<!-- ABOUT -->
-<section id="about" class="relative py-28 md:py-36 bg-char">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10 grid md:grid-cols-12 gap-10 md:gap-16 items-center">
-    <div class="md:col-span-5 reveal-up">
-      <p class="font-body text-[12px] tracking-[0.4em] uppercase text-gold mb-5">Философия</p>
-      <h2 class="font-display text-3xl md:text-5xl leading-[1.05] text-bone mb-8">
-        Там, где дым мангала&nbsp;встречается&nbsp;с турецким чаем
+<!-- ============ ABOUT ============ -->
+<section id="about" class="py-24 md:py-32">
+  <div class="container-x grid md:grid-cols-2 gap-14 items-center">
+    <div data-reveal>
+      <p class="eyebrow mb-4">О НАС</p>
+      <h2 class="font-display font-bold text-3xl md:text-5xl leading-tight mb-6">
+        Фермерское мясо.<br><span class="gold-underline" style="color:#e8c179;">Турецкое</span> гостеприимство.
       </h2>
-      <p class="text-bone/70 leading-relaxed mb-5">
-        Hayalet — это открытый огонь, выдержанная говядина и подача, которую не спутаешь ни с чем: стейки в
-        сусальном золоте, фламбе прямо у стола и турецкий завтрак, рассчитанный на всю компанию.
+      <p class="text-stone text-base md:text-lg leading-relaxed mb-8">
+        Hayalet жарит стейки на открытом огне и накрывает турецкий завтрак так, будто вы в гостях у большой семьи в Стамбуле: три вида сыров, борек из тонкого теста, домашние варенья, тахин и чай, который не успевает остыть.
       </p>
-      <p class="text-bone/70 leading-relaxed">
-        Мы придерживаемся простого правила: мясо говорит само за себя, если дать ему время на углях и не мешать
-        лишним. Остальное — гостеприимство, музыка и хороший бокал вина — дополняет вечер, а не отвлекает от него.
-      </p>
-    </div>
-    <div class="md:col-span-7 grid grid-cols-2 gap-4 md:gap-6">
-      <div class="fig reveal-up mt-10">
-        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4496.jpeg"
-             alt="Фламбе у стола" class="w-full h-72 md:h-96 object-cover">
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-surface border border-hairline rounded-2xl p-5">
+          <p class="eyebrow mb-2" style="font-size:0.62rem;">ЧАСЫ РАБОТЫ</p>
+          <p class="font-display text-lg text-cream">Ежедневно</p>
+          <p class="text-stone text-sm mt-1">09:00 — 01:00</p>
+        </div>
+        <div class="bg-surface border border-hairline rounded-2xl p-5">
+          <p class="eyebrow mb-2" style="font-size:0.62rem;">ФУРШЕТНЫЙ ЛАНЧ</p>
+          <p class="font-display text-lg text-cream">5 990 ₸</p>
+          <p class="text-stone text-sm mt-1">Ежедневно</p>
+        </div>
+        <div class="bg-surface border border-hairline rounded-2xl p-5 col-span-2">
+          <p class="eyebrow mb-2" style="font-size:0.62rem;">ФУРШЕТНЫЙ ЗАВТРАК</p>
+          <p class="font-display text-lg text-cream">Каждое воскресенье</p>
+          <p class="text-stone text-sm mt-1">Турецкий стол в полном составе</p>
+        </div>
       </div>
-      <div class="fig reveal-up">
-        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4497.jpeg"
-             alt="Стейки на углях" class="w-full h-72 md:h-96 object-cover">
+    </div>
+
+    <div class="relative rounded-3xl overflow-hidden gal-item h-[420px] md:h-[560px]" data-reveal>
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4501.jpeg" alt="Интерьер зала Hayalet Steak House" class="w-full h-full object-cover" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ============ SIGNATURE — 24K GOLD STEAK ============ -->
+<section id="signature" class="relative py-40 md:py-56 overflow-hidden">
+  <div class="absolute inset-0">
+    <img id="gold-img" src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4493.jpeg" alt="Стейк в 24-каратном золоте" class="w-full h-full object-cover scale-110">
+    <div class="absolute inset-0" style="background:linear-gradient(0deg, rgba(20,16,12,0.95) 0%, rgba(20,16,12,0.55) 45%, rgba(20,16,12,0.75) 100%);"></div>
+  </div>
+
+  <div class="relative container-x text-center">
+    <p class="eyebrow mb-5" data-reveal>ФИРМЕННАЯ ПОДАЧА</p>
+    <h2 class="font-display font-black text-cream text-[11vw] md:text-[6vw] leading-[0.95]" data-reveal>
+      МЯСО В<br><span style="color:#e8c179;">24 КАРАТАХ</span>
+    </h2>
+    <p class="font-accent italic text-xl md:text-2xl text-stone max-w-xl mx-auto mt-7" data-reveal>
+      Фирменные стейки Hayalet укрывают настоящим 24-каратным золотом — эффектный финал для по-настоящему особенного вечера.
+    </p>
+    <button data-open-category="gold-steaks" class="btn-gold mt-9" data-reveal>Смотреть золотые стейки</button>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section id="gallery" class="py-24 md:py-32">
+  <div class="container-x">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+      <div data-reveal>
+        <p class="eyebrow mb-4">АТМОСФЕРА</p>
+        <h2 class="font-display font-bold text-3xl md:text-5xl">Атмосфера Hayalet</h2>
+      </div>
+      <p class="text-stone max-w-sm" data-reveal>Открытый огонь, турецкие завтраки и зал, где не хочется торопиться.</p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[190px] md:auto-rows-[220px]">
+      <div class="gal-item rounded-2xl row-span-2 col-span-1" data-parallax="0.08" data-reveal>
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4500.jpeg" alt="Зал Hayalet Steak House" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="gal-item rounded-2xl col-span-1" data-parallax="-0.05" data-reveal>
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4497.jpeg" alt="Стейки на углях" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="gal-item rounded-2xl col-span-1" data-parallax="0.1" data-reveal>
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4502.jpeg" alt="Турецкий завтрак Hayalet" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="gal-item rounded-2xl row-span-2 col-span-1" data-parallax="-0.08" data-reveal>
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4498.jpeg" alt="Стейк на подаче" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="gal-item rounded-2xl col-span-1" data-parallax="0.06" data-reveal>
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4503.jpeg" alt="Бургер Hayalet" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="gal-item rounded-2xl col-span-1" data-parallax="-0.1" data-reveal>
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4504.jpeg" alt="Рыба и салат" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="gal-item rounded-2xl col-span-2 md:col-span-1" data-parallax="0.05" data-reveal>
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4501.jpeg" alt="Интерьер зала" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="gal-item rounded-2xl col-span-1" data-parallax="-0.06" data-reveal>
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4494.jpeg" alt="Десерт Hayalet" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="gal-item rounded-2xl col-span-1" data-parallax="0.09" data-reveal>
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4495.jpeg" alt="Завтрак на террасе" class="w-full h-full object-cover" loading="lazy">
       </div>
     </div>
   </div>
 </section>
 
-<!-- GALLERY -->
-<section id="gallery" class="relative py-28 md:py-36 bg-terra overflow-hidden">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10 mb-14">
-    <p class="font-body text-[12px] tracking-[0.4em] uppercase text-gold mb-5 reveal-up">Атмосфера</p>
-    <h2 class="font-display text-3xl md:text-5xl text-bone reveal-up">Зал, кухня и то, что&nbsp;между&nbsp;ними</h2>
-  </div>
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-    <div class="fig parallax-img col-span-1 row-span-2">
-      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4498.jpeg" alt="Стейк Тибон" class="w-full h-[280px] md:h-[520px] object-cover">
-    </div>
-    <div class="fig parallax-img col-span-1">
-      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4501.jpeg" alt="Интерьер зала" class="w-full h-[220px] md:h-[248px] object-cover">
-    </div>
-    <div class="fig parallax-img col-span-1">
-      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4503.jpeg" alt="Бургер Hayalet" class="w-full h-[220px] md:h-[248px] object-cover">
-    </div>
-    <div class="fig parallax-img col-span-1">
-      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4500.jpeg" alt="Зал Hayalet" class="w-full h-[220px] md:h-[248px] object-cover">
-    </div>
-    <div class="fig parallax-img col-span-2 md:col-span-1 row-span-2">
-      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4502.jpeg" alt="Турецкий завтрак" class="w-full h-[280px] md:h-[520px] object-cover">
-    </div>
-    <div class="fig parallax-img col-span-1">
-      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4504.jpeg" alt="Рыба на гриле" class="w-full h-[220px] md:h-[248px] object-cover">
-    </div>
-    <div class="fig parallax-img col-span-1">
-      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4494.jpeg" alt="Десерт Павлова" class="w-full h-[220px] md:h-[248px] object-cover">
-    </div>
-  </div>
-</section>
-
-<!-- MENU -->
-<section id="menu" class="relative py-28 md:py-36 bg-char">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-      <div>
-        <p class="font-body text-[12px] tracking-[0.4em] uppercase text-gold mb-5 reveal-up">Меню</p>
-        <h2 class="font-display text-3xl md:text-5xl text-bone reveal-up">Полная карта Hayalet</h2>
+<!-- ============ MENU ============ -->
+<section id="menu" class="py-24 md:py-32 bg-surface">
+  <div class="container-x">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+      <div data-reveal>
+        <p class="eyebrow mb-4">МЕНЮ</p>
+        <h2 class="font-display font-bold text-3xl md:text-5xl">Полное меню</h2>
+        <p class="text-stone max-w-md mt-3">Основные блюда, бар и винная карта — целиком, с ценами.</p>
       </div>
-      <p class="text-bone/50 text-sm reveal-up">Цены указаны в тенге (₸) · обслуживание 12%</p>
+
+      <div class="relative w-full md:w-80" data-reveal>
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6f6459" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="menu-search" type="text" placeholder="Искать блюдо или напиток..." class="w-full bg-surface2 border border-hairline rounded-full py-3 pl-11 pr-4 text-cream text-sm">
+      </div>
     </div>
 
-    <!-- top-level tabs -->
-    <div class="flex flex-wrap gap-3 mb-10 reveal-up">
-      <button class="tab-btn border border-bone/25 text-bone/80 text-[12px] tracking-[0.1em] uppercase px-5 py-2.5 transition-colors" data-tab="food" data-active="true">Основное меню</button>
-      <button class="tab-btn border border-bone/25 text-bone/80 text-[12px] tracking-[0.1em] uppercase px-5 py-2.5 transition-colors" data-tab="bar">Барное меню</button>
-      <button class="tab-btn border border-bone/25 text-bone/80 text-[12px] tracking-[0.1em] uppercase px-5 py-2.5 transition-colors" data-tab="wine">Винная карта</button>
+    <div class="flex flex-wrap gap-3 mb-4" data-reveal>
+      <button class="menu-tab active" data-tab="main">Основное меню</button>
+      <button class="menu-tab" data-tab="bar">Барное меню</button>
+      <button class="menu-tab" data-tab="wine">Винная карта</button>
     </div>
+    <p class="text-stone-dim text-xs mb-10">Обслуживание 12%. Меню обновляется — актуальность блюд и цен уточняйте у администратора.</p>
 
-    <!-- panels injected by JS -->
-    <div id="panel-food" class="reveal-panel" data-hidden="false">
-      <div id="pills-food" class="flex flex-wrap gap-2 mb-10 sticky top-[72px] z-30 bg-char/95 backdrop-blur py-3"></div>
-      <div id="cats-food"></div>
-    </div>
-    <div id="panel-bar" class="reveal-panel" data-hidden="true">
-      <div id="pills-bar" class="flex flex-wrap gap-2 mb-10 sticky top-[72px] z-30 bg-char/95 backdrop-blur py-3"></div>
-      <div id="cats-bar"></div>
-    </div>
-    <div id="panel-wine" class="reveal-panel" data-hidden="true">
-      <div id="pills-wine" class="flex flex-wrap gap-2 mb-10 sticky top-[72px] z-30 bg-char/95 backdrop-blur py-3"></div>
-      <div id="cats-wine"></div>
-    </div>
+    <div id="menu-panels"></div>
   </div>
 </section>
 
-<!-- MARQUEE 2 -->
-<div class="relative bg-ember py-4 rotate-1 z-20 overflow-hidden">
-  <div class="marquee-track" id="marquee-2"></div>
-</div>
-
-<!-- CONTACT / FOOTER -->
-<section id="contact" class="relative py-28 md:py-36 bg-terra">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10">
-    <div class="grid md:grid-cols-2 gap-14 md:gap-10 items-start">
-      <div class="reveal-up">
-        <p class="font-body text-[12px] tracking-[0.4em] uppercase text-gold mb-5">Ждём вас</p>
-        <h2 class="font-display text-4xl md:text-6xl leading-[1.02] text-bone mb-8">
-          Стол уже<br>разгорается
-        </h2>
-        <p class="text-bone/60 leading-relaxed max-w-md">
-          Пишите или звоните — подберём столик, соберём компанию под турецкий завтрак или зарезервируем место
-          у мангала.
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="py-24 md:py-32">
+  <div class="container-x">
+    <div class="grid md:grid-cols-2 gap-14 items-center">
+      <div data-reveal>
+        <p class="eyebrow mb-4">БРОНИРОВАНИЕ</p>
+        <h2 class="font-display font-bold text-3xl md:text-5xl mb-6">Забронировать столик</h2>
+        <p class="text-stone text-base md:text-lg leading-relaxed mb-9 max-w-md">
+          Напишите в WhatsApp — ответим и подберём стол на нужное время и число гостей.
         </p>
-      </div>
 
-      <div class="grid sm:grid-cols-2 gap-8 reveal-up">
-        <div>
-          <p class="text-[11px] tracking-[0.3em] uppercase text-smoke mb-3">Адрес</p>
-          <a href="https://maps.app.goo.gl/7itNaTcKfrpPj84x5?g_st=ic" target="_blank" rel="noopener"
-             class="text-bone hover:text-gold transition-colors underline underline-offset-4 decoration-gold/40">
-            Открыть на карте
-          </a>
-          <p class="text-bone/50 text-sm mt-1">Алматы</p>
-        </div>
-        <div>
-          <p class="text-[11px] tracking-[0.3em] uppercase text-smoke mb-3">WhatsApp</p>
-          <a href="https://wa.me/77010777756" target="_blank" rel="noopener"
-             class="text-bone hover:text-gold transition-colors">+7 701 077 7756</a>
-        </div>
-        <div>
-          <p class="text-[11px] tracking-[0.3em] uppercase text-smoke mb-3">Instagram</p>
-          <a href="https://www.instagram.com/hayalet.almaty" target="_blank" rel="noopener"
-             class="text-bone hover:text-gold transition-colors">@hayalet.almaty</a>
-        </div>
-        <div>
-          <p class="text-[11px] tracking-[0.3em] uppercase text-smoke mb-3">Бронирование</p>
-          <a href="https://wa.me/77010777756" target="_blank" rel="noopener"
-             class="glow-btn inline-flex items-center gap-2 bg-ember text-bone text-[12px] tracking-[0.08em] uppercase px-6 py-3 mt-1">
+        <div class="flex flex-wrap gap-4 mb-10">
+          <a href="https://wa.me/77010777756" target="_blank" rel="noopener noreferrer" class="btn-gold">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2.02 6.48 2.02 12c0 1.85.5 3.58 1.36 5.07L2 22l5.06-1.33A9.94 9.94 0 0 0 12.02 22C17.54 22 22 17.52 22 12S17.54 2 12.02 2zm0 18.06c-1.6 0-3.1-.43-4.4-1.19l-.32-.19-3.01.79.8-2.93-.2-.3a8.02 8.02 0 0 1-1.25-4.24c0-4.46 3.63-8.08 8.09-8.08 4.46 0 8.08 3.62 8.08 8.08 0 4.46-3.62 8.06-8.08 8.06zm4.44-6.05c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.55.12-.16.24-.63.78-.77.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.32-.75-1.81-.2-.48-.4-.41-.55-.42-.14-.01-.3-.01-.46-.01-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.13 3.64.58.25 1.03.4 1.38.51.58.18 1.1.16 1.52.1.46-.07 1.43-.58 1.63-1.15.2-.57.2-1.05.14-1.15-.06-.1-.22-.16-.46-.28z"/></svg>
             Написать в WhatsApp
           </a>
+          <a href="https://www.instagram.com/hayalet.almaty?igsh=dmhzdWU5YnJ2ankz" target="_blank" rel="noopener noreferrer" class="btn-ghost">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+            Instagram
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-surface border border-hairline rounded-2xl p-5">
+            <p class="eyebrow mb-2" style="font-size:0.62rem;">АДРЕС</p>
+            <p class="text-cream text-sm leading-relaxed">Алматы,<br>ул. Мендикулова, 98</p>
+            <a href="https://maps.app.goo.gl/7itNaTcKfrpPj84x5?g_st=ic" target="_blank" rel="noopener noreferrer" class="text-gold text-sm inline-flex items-center gap-1 mt-3">
+              Открыть на карте
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
+            </a>
+          </div>
+          <div class="bg-surface border border-hairline rounded-2xl p-5">
+            <p class="eyebrow mb-2" style="font-size:0.62rem;">ЧАСЫ РАБОТЫ</p>
+            <p class="text-cream text-sm leading-relaxed">Ежедневно<br>09:00 — 01:00</p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="hairline my-16"></div>
-
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-      <div class="flex items-center gap-3">
-        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4507%20%28%D1%84%D0%BE%D0%BD%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%29.png"
-             alt="Hayalet" class="h-8 w-8 object-contain" onerror="this.style.display='none'">
-        <span class="font-display text-sm tracking-[0.2em] text-bone">HAYALET STEAK HOUSE</span>
+      <div class="relative rounded-3xl overflow-hidden gal-item h-[420px] md:h-[560px]" data-reveal>
+        <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4495.jpeg" alt="Стол Hayalet Steak House" class="w-full h-full object-cover" loading="lazy">
       </div>
-      <p class="text-bone/40 text-xs tracking-wide">Almaty, Kazakhstan</p>
     </div>
   </div>
 </section>
 
+<!-- ============ FOOTER ============ -->
+<footer class="hairline-t py-10">
+  <div class="container-x flex flex-col md:flex-row items-center justify-between gap-5">
+    <div class="flex items-center gap-3">
+      <img src="https://raw.githubusercontent.com/arabovgenius-ux/hayalet-steakhouse/main/IMG_4507%20%28%D1%84%D0%BE%D0%BD%20%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%29.png" alt="Hayalet Steak House" class="h-8 w-8 rounded-full object-cover">
+      <span class="text-stone text-sm">© Hayalet Steak House. Местное фермерское мясо и турецкая душа.</span>
+    </div>
+    <div class="flex items-center gap-6 text-sm text-stone">
+      <a href="https://wa.me/77010777756" target="_blank" rel="noopener noreferrer" class="hover:text-gold transition-colors">WhatsApp</a>
+      <a href="https://www.instagram.com/hayalet.almaty?igsh=dmhzdWU5YnJ2ankz" target="_blank" rel="noopener noreferrer" class="hover:text-gold transition-colors">Instagram</a>
+    </div>
+  </div>
+</footer>
+
 <script>
-/* graceful fallback for any image that fails to load */
-document.addEventListener('error', function(e){
-  const t = e.target;
-  if(t.tagName === 'IMG' && !t.dataset.fallbackApplied){
-    t.dataset.fallbackApplied = 'true';
-    t.style.display = 'none';
-    if(t.parentElement){ t.parentElement.style.background = 'linear-gradient(160deg,#1e1712,#0b0a08)'; }
-  }
-}, true);
-
-/* =========================================================
+/* ======================================================================
    MENU DATA
-========================================================= */
-const it = (n, p, d) => d ? {n,p,d} : {n,p};
+====================================================================== */
+function pluralize(n, forms) {
+  const mod10 = n % 10, mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return forms[0];
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return forms[1];
+  return forms[2];
+}
 
-const FOOD = [
-  { cat: "Завтраки", items: [
-    it("Турецкий завтрак на одного","8 490 ₸"),
-    it("Турецкий завтрак на двоих","16 490 ₸"),
-    it("Турецкий завтрак на четверых","28 990 ₸","Глазунья, менемен, корзинка хлеба, турецкая выпечка, борек, сметана, три вида оливок, три вида сыров, ветчина, овощная нарезка, аджика, сухофрукты, варенье, нутелла, мед, масло, тахин"),
-    it("Диетический омлет","1 490 ₸","Яйца, зелень, помидор, соль, перец, оливковое масло"),
-    it("Омлет с сыром","1 590 ₸","Яйца, молоко, сыр кашар, соль, перец"),
-    it("Яйца Бенедикт","3 790 ₸","Тост, соус голландез, авокадо, копчёная сёмга, яйцо пашот"),
-    it("Яичница с турецкой колбасой","2 690 ₸"),
-    it("Сосиски на сковороде","2 450 ₸"),
-    it("Суджук","2 490 ₸","Турецкая колбаса на сковороде"),
-    it("Менемен","1 990 ₸","Яйца, помидоры, соль, перец, зелень"),
-    it("Панкейки","1 990 ₸","Яйца, молоко, мука, сахар, соль"),
-    it("Омлет с грибами","1 790 ₸","Яйцо, грибы"),
-    it("Мыхлама","3 490 ₸","Кукурузная мука, сливочное масло, вода, сыр"),
-    it("Яичница с кавурмой","3 490 ₸"),
-    it("Английский завтрак","4 490 ₸"),
-  ]},
-  { cat: "Супы", items: [
-    it("Чечевичный суп","1 890 ₸","Лёгкий шелковистый суп из красной чечевицы"),
-    it("Фирменный мясной суп Hayalet","2 990 ₸","Наваристый мясной суп из говядины от шеф-повара"),
-    it("Хаялет суп","3 490 ₸","Крем, молоко, мука, масло, нохут, рис, мясо говядины 100 г"),
-  ]},
-  { cat: "Салаты", items: [
-    it("Греческий салат","2 990 ₸","Помидоры, сладкий перец, огурцы, чёрные оливки, петрушка, брынза, оливковое масло"),
-    it("Салат с сыром тулум","3 990 ₸","Листья салата, помидоры, кукуруза, сыр тулум, грецкий орех"),
-    it("Салат с авокадо и киноа","3 850 ₸","Авокадо, киноа, яблоко, имбирь, грецкий орех"),
-    it("Тёплый салат с говядиной","3 950 ₸","Говядина на мангале, сезонная зелень, лимон, оливковое масло"),
-    it("Цезарь с курицей","3 490 ₸","Айсберг, куриное филе, перепелиные яйца, сыр"),
-    it("Салат Капрезе","3 990 ₸","Моцарелла и свежие помидоры под фирменным соусом"),
-    it("Салат с креветками","4 990 ₸","Микс салата, креветки, гранат, пармезан"),
-    it("Салат Роккет","3 490 ₸","Руккола, пармезан, сладкая кукуруза, гранат, черри"),
-    it("Гавурда","3 250 ₸","Помидоры, огурцы, сладкий перец, грецкий орех, гранатовый соус"),
-    it("Чобан салат","2 850 ₸","Помидор, огурцы, петрушка, красный лук"),
-    it("Салат Hayalet festival","4 990 ₸","Сушёный изюм, черри, грецкий орех, малина, яблоко, малиновый соус"),
-    it("Опера салат","4 890 ₸","Сушёные финики, черри, манго, редиска, фасоль, сладкий картофель"),
-    it("Салат Hayalet star","4 990 ₸","Брокколи, свёкла, финики с сыром, миндаль, апельсин, пармезан"),
-    it("Буратта","4 990 ₸","Руккола, черри, нежный сыр буратта, фисташки"),
-  ]},
-  { cat: "Холодные закуски", items: [
-    it("Карпаччо из говядины","3 990 ₸","Тонкие слайсы вырезки, оливковое масло, бальзамик, руккола, сыр"),
-    it("Мясное ассорти","5 990 ₸","Ростбиф, запечённая курица, говяжий язык, копчёная вырезка"),
-    it("Beef Tartar","5 990 ₸","Говяжий бонфиле, перепелиные яйца, красный лук, острый соус"),
-    it("Сырная тарелка","6 490 ₸","Чеддер, моцарелла, чечил, пармезан, езене"),
-  ]},
-  { cat: "Турецкие мезе", items: [
-    it("Джаджик","2 490 ₸","Турецкий йогурт, огурцы"),
-    it("Чи-кёфте","2 450 ₸"),
-    it("Атом","1 790 ₸","Сюзме, острый перец, чеснок"),
-    it("Хумус","1 990 ₸","Нут, чеснок, тахини, кимён"),
-    it("Долма в гранатовом соусе","1 990 ₸","Рис, лук, гранатовые листья"),
-    it("Мутаббель с баклажаном","1 790 ₸","Баклажан, турецкий йогурт, чеснок, тахини"),
-    it("Мутаббель со свёклой","1 790 ₸","Свёкла, йогурт, чеснок, тахини, кунжут"),
-    it("Бабагануш","1 990 ₸","Баклажан, болгарский перец, чеснок"),
-    it("Эзме","1 990 ₸","Перец, помидор, огурцы, острый перец, гранатовый соус"),
-    it("Чингене","1 790 ₸","Кабачки, турецкий йогурт, чеснок, грецкий орех"),
-    it("Ассорти мезе","6 990 ₸"),
-    it("Муамарра","2 290 ₸","Красный сладкий перец, панировочные сухари, лук, грецкий орех · New"),
-    it("Хаялет бёрек","3 190 ₸","Блинчики, капуста, морковь, курица"),
-  ]},
-  { cat: "Горячие закуски", items: [
-    it("Ичли кёфте","2 790 ₸","Говяжий фарш, лук, зелень, перец, булгур"),
-    it("Жареная картошка по-мерсински","2 100 ₸"),
-    it("Запечённые грибы с сыром чеддер","2 690 ₸"),
-    it("Запечённые креветки","5 190 ₸","Перец, грибы, помидор, креветки"),
-    it("Турецкие манты Çitir manti","3 890 ₸","Йогурт, манты, чеснок, помидорный соус"),
-  ]},
-  { cat: "Гарниры", items: [
-    it("Хумус с мясом","3 990 ₸"),
-    it("Овощи на гриле","2 790 ₸"),
-    it("Кумпир с сыром","2 490 ₸"),
-    it("Тушёный шпинат с грибами","1 790 ₸"),
-    it("Булгур","1 390 ₸"),
-    it("Фри","1 790 ₸"),
-    it("Картофельные дольки","1 990 ₸"),
-    it("Рис","1 390 ₸"),
-    it("Грибы с йогуртом","3 490 ₸","Жареный лаваш, турецкий йогурт, жареные грибы"),
-  ]},
-  { cat: "Стейки", items: [
-    it("Yaprak New York","9 990 ₸"),
-    it("Антрекот","7 490 ₸"),
-    it("Стейк «Рибай»","11 490 ₸"),
-    it("Стейк «Томагавк»","16 990 ₸"),
-    it("Говяжие спагетти","6 990 ₸"),
-    it("Стейк «Лукум»","6 990 ₸"),
-    it("Стейк «Даллас»","12 990 ₸"),
-    it("Стейк «Нью-Йорк»","8 990 ₸"),
-    it("Стейк «Тибон»","12 990 ₸"),
-  ], note: "Все стейки подаются с запечённой картошкой, тушёным шпинатом с грибами и соусом демиглас"},
-  { cat: "Стейки из баранины", items: [
-    it("Перзола","6 990 ₸"),
-    it("Филе баранины","7 690 ₸"),
-    it("«Нью-Йорк» из баранины","6 190 ₸"),
-    it("Цельные бараньи рёбрышки","21 990 ₸"),
-    it("Перзола с шоу-подачей","23 990 ₸"),
-  ]},
-  { cat: "Рыба", items: [
-    it("Морской окунь","6 890 ₸"),
-    it("Дорадо","6 890 ₸"),
-    it("Сёмга","8 990 ₸"),
-  ]},
-  { cat: "Особые блюда", items: [
-    it("Конфит Перзола","14 990 ₸ / 2 чел · 27 990 ₸ / 4 чел"),
-    it("Асадо","17 990 ₸ / 2 рёбра · 34 990 ₸ / 4 рёбра · 51 490 ₸ / 6 рёбер"),
-  ]},
-  { cat: "Стейки в 24-каратном золоте", items: [
-    it("Hayalet Special","20 990 ₸ / на двоих · 39 990 ₸ / на 4 · 58 990 ₸ / на 6"),
-    it("Стейк «Даллас» золото","43 990 ₸"),
-    it("Стейк «Рибай» золото","38 990 ₸"),
-    it("Стейк «Томагавк» золото","48 990 ₸"),
-    it("Стейк из бонфиле золото","69 990 ₸"),
-  ]},
-  { cat: "Turkish Kebabs", items: [
-    it("Чокертме кебаб","6 490 ₸","Жареный картофель, йогурт, соус искандер, говядина, томатная паста"),
-    it("Чобан кавурма","5 490 ₸","Болгарский перец, лук, помидор, говядина"),
-    it("Перзола из баранины","5 390 ₸"),
-    it("Куриный чокертме","4 990 ₸","Жареный картофель, йогурт, куриный шашлык"),
-    it("Шехзаде из говядины","7 490 ₸"),
-    it("Касап искандер","4 690 ₸","Тырнак пиде, йогурт, помидорный соус, касап кёфте"),
-    it("Медальон из говядины","5 990 ₸","Картофельное пюре, крем-шпинат, бонфиле"),
-    it("Фирменное мясо шефа","6 990 ₸","Красный сладкий перец, лук, чеснок, бонфиле"),
-  ]},
-  { cat: "Кебабы и шашлыки", items: [
-    it("Hayalet-кебаб","6 990 ₸"),
-    it("Адана","4 290 ₸"),
-    it("Урфа","4 290 ₸"),
-    it("Алиназик","5 490 ₸","Турецкий йогурт с чесноком, моцарелла, баклажан"),
-    it("Бейти сарма","4 990 ₸","Лаваш, баклажан, моцарелла, говядина и баранина, соус искандер"),
-    it("Шашлык из баранины","5 490 ₸","Мелко нарезанный, петрушка, перец, помидор"),
-    it("Шашлык из курицы","4 090 ₸"),
-    it("Куриные крылышки","3 990 ₸"),
-    it("Куриная грудка","5 490 ₸"),
-    it("Ассорти-кебаб","13 990 ₸ / на двоих · 25 990 ₸ / на четверых · 51 990 ₸ / на шестерых"),
-  ], note: "Все кебабы и шашлыки подаются с булгуром и овощами на гриле"},
-  { cat: "Котлеты / кёфте", items: [
-    it("Касап кёфте","4 490 ₸"),
-    it("Уфо котлеты","7 490 ₸"),
-    it("Мини кёфте с сыром","4 990 ₸"),
-  ]},
-  { cat: "Пиде", items: [
-    it("Пиде с мясом кавурма","5 990 ₸"),
-    it("Пиде с сыром","4 190 ₸","Хрустящее пшеничное тесто, моцарелла"),
-    it("Пиде с мясом","4 190 ₸","Пшеничное тесто, говядина"),
-    it("Лахмаджун","3 190 ₸","Фарш, томатный соус, лук, петрушка, лимон"),
-    it("Трабзон пиде со шпинатом","4 490 ₸","Хрустящее тесто, шпинат, моцарелла"),
-    it("Hayalet пиде","5 990 ₸","Фарш, суджук, моцарелла, петрушка"),
-  ]},
-  { cat: "Паста", items: [
-    it("Арабьята","2 690 ₸","Пенне, томаты, острый перец, оливки"),
-    it("Пенне с мясом","3 390 ₸","Пенне, бонфиле, сливочный соус, лук, чеснок"),
-    it("Феттучини Альфредо","3 190 ₸","Сливочный соус, лук, куриное филе"),
-    it("Феттучини с креветками","5 490 ₸","Сливочный соус, лук, креветки, пармезан"),
-    it("Спагетти Болоньезе","4 390 ₸","Томатный соус, говяжий фарш, пармезан"),
-  ]},
-  { cat: "Пицца", items: [
-    it("Пицца четыре сыра","3 990 ₸","Рокфор, моцарелла, чеддер, пармезан"),
-    it("Маргарита","3 190 ₸","Моцарелла, базилик, томаты"),
-    it("Пицца с грибами","3 690 ₸","Грибы, моцарелла, тимьян"),
-    it("Пицца с мясом","3 990 ₸","Говядина, моцарелла, чеддер"),
-    it("Фирменная пицца Hayalet","3 990 ₸","Бастурма, суджук, томаты, моцарелла, сладкий перец"),
-    it("Пепперони","5 490 ₸","Моцарелла, говяжья колбаса, суджук"),
-  ]},
-  { cat: "Бургеры", items: [
-    it("Гамбургер","4 390 ₸","Котлета из говядины, солёные огурцы, помидоры"),
-    it("Чизбургер","4 590 ₸","Котлета из говядины, чеддер, солёные огурцы, помидоры"),
-    it("Лукум бургер","5 390 ₸","Вырезка на мангале, корнишоны, черри"),
-    it("Мини бургер","3 890 ₸","Котлета из говядины, помидор, салат"),
-    it("Микс тарелка для детей","3 190 ₸","Котлеты, сосиски, картофель фри"),
-    it("Асадо бургер","6 490 ₸","Салат, помидор, мясо асадо"),
-    it("Hayalet бургер","5 990 ₸","Фарш из говядины, фуа-гра, салат"),
-  ], note: "Все бургеры подаются с картофелем фри и соусами"},
-  { cat: "Десерты", items: [
-    it("Баклава с мороженым","2 990 ₸","Хавуч дилим"),
-    it("Чизкейк","3 190 ₸"),
-    it("Сутлач","1 490 ₸"),
-    it("Магнолия","2 490 ₸"),
-    it("Медовик","2 990 ₸"),
-    it("Сникерс","2 990 ₸"),
-    it("Прага","2 990 ₸"),
-    it("Наполеон","2 990 ₸"),
-    it("Милки Дрим","3 190 ₸"),
-    it("Фисташковый рулет","3 490 ₸"),
-    it("Мини-фруктовое ассорти","7 890 ₸"),
-    it("Фруктовое ассорти","11 990 ₸"),
-    it("Марочино","2 990 ₸"),
-    it("Испанский чизкейк","2 990 ₸"),
-    it("Кадайф классический","2 200 ₸ / 1 шт · 16 000 ₸ / 1 кг"),
-    it("Хавуч","3 190 ₸ / 1 шт · 18 000 ₸ / 1 кг"),
-    it("Молочная баклава","1 200 ₸ / 1 шт · 14 000 ₸ / 1 кг"),
-  ]},
-];
+const MENU = {
+  main: [
+    { key:'breakfast', title:`Завтраки`, items:[
+      {n:`Турецкий завтрак на одного`, p:`8 490 ₸`},
+      {n:`Турецкий завтрак на двоих`, p:`16 490 ₸`},
+      {n:`Турецкий завтрак на четверых`, d:`Глазунья, менемен, корзинка хлеба, турецкая выпечка, борек, сметана, три вида оливок, три вида сыров, ветчина, овощная нарезка, аджика, сухофрукты, варенье, нутелла, мёд, масло, тахин`, p:`28 990 ₸`},
+      {n:`Диетический омлет`, d:`Яйца, зелень, помидор, соль, перец, оливковое масло`, p:`1 490 ₸`},
+      {n:`Омлет с сыром`, d:`Яйца, молоко, сыр кашар, соль, перец`, p:`1 590 ₸`},
+      {n:`Яйца Бенедикт`, d:`Тост, соус голландез, авокадо, копчёная сёмга, яйцо пашот`, p:`3 790 ₸`},
+      {n:`Яичница с турецкой колбасой`, p:`2 690 ₸`},
+      {n:`Сосиски на сковороде`, p:`2 450 ₸`},
+      {n:`Суджук`, d:`Турецкая колбаса на сковороде`, p:`2 490 ₸`},
+      {n:`Менемен`, d:`Яйца, помидоры, соль, перец, зелень`, p:`1 990 ₸`},
+      {n:`Панкейки`, d:`Яйца, молоко, мука, сахар, соль`, p:`1 990 ₸`},
+      {n:`Омлет с грибами`, d:`Яйцо, грибы`, p:`1 790 ₸`},
+      {n:`Мыхлама`, d:`Кукурузная мука, сливочное масло, вода, сыр`, p:`3 490 ₸`},
+      {n:`Яичница с кавурмой`, p:`3 490 ₸`},
+      {n:`Английский завтрак`, p:`4 490 ₸`},
+    ]},
+    { key:'soups', title:`Супы`, items:[
+      {n:`Чечевичный суп`, d:`Лёгкий шелковистый суп из красной чечевицы`, p:`1 890 ₸`},
+      {n:`Фирменный мясной суп Hayalet`, d:`Наваристый мясной суп из говядины от шеф-повара`, p:`2 990 ₸`},
+      {n:`Хаялет суп`, d:`Крем, молоко, мука, масло, нохут, рис, мясо говядины 100 г`, p:`3 490 ₸`},
+    ]},
+    { key:'salads', title:`Салаты`, items:[
+      {n:`Греческий салат`, d:`Свежие помидоры, сладкий перец, огурцы, чёрные оливки, петрушка, масколин, брынза, оливковое масло`, p:`2 990 ₸`},
+      {n:`Салат с сыром тулум`, d:`Свежие листья салата, помидоры, кукуруза, сыр тулум, оливковое масло, грецкий орех`, p:`3 990 ₸`},
+      {n:`Салат с авокадо и киноа`, d:`Авокадо, киноа, яблоко, имбирь и грецкий орех`, p:`3 850 ₸`},
+      {n:`Тёплый салат с говядиной`, d:`Нежная говядина, приготовленная на мангале, сезонная зелень, лимон и оливковое масло`, p:`3 950 ₸`},
+      {n:`Цезарь с курицей`, d:`Листья салата Айсберг, ломтики куриного филе, перепелиные яйца, сыр`, p:`3 490 ₸`},
+      {n:`Салат Капрезе`, d:`Сыр моцарелла и свежие помидоры под фирменным соусом`, p:`3 990 ₸`},
+      {n:`Салат с креветками`, d:`Микс салата, креветки, гранат, сыр пармезан, помидорки`, p:`4 990 ₸`},
+      {n:`Салат Роккет`, d:`Листья рукколы, сыр пармезан, сладкая кукуруза, зёрна граната и помидоры черри`, p:`3 490 ₸`},
+      {n:`Гавурда`, d:`Мелко нарезанные свежие помидоры, огурцы, сладкий перец, грецкий орех, гранатовый соус`, p:`3 250 ₸`},
+      {n:`Чобан салат`, d:`Помидор, огурцы, петрушка, красный лук`, p:`2 850 ₸`},
+      {n:`Салат Hayalet festival`, d:`Салатный лист, сушёный чёрный изюм, черри, грецкий орех, малина, красное яблоко, малиновый соус`, p:`4 990 ₸`},
+      {n:`Опера салат`, d:`Салатный лист, сушёные финики, черри, манго, редиска, зелёная фасоль, сладкий картофель, малиновый соус`, p:`4 890 ₸`},
+      {n:`Салат Hayalet star`, d:`Брокколи, свёкла, сушёные финики с сыром, миндаль, апельсин, пармезан, бальзамический соус`, p:`4 990 ₸`},
+      {n:`Буратта`, d:`Руккола, черри, нежный сыр буратта, фисташки`, p:`4 990 ₸`},
+    ]},
+    { key:'cold-app', title:`Холодные закуски`, items:[
+      {n:`Карпаччо из говядины`, d:`Тонко нарезанные слайсы сырой говяжьей вырезки, оливковое масло и бальзамический крем-соус, листья рукколы и сыр`, p:`3 990 ₸`},
+      {n:`Мясное ассорти`, d:`Сочный ростбиф, запечённая курица, говяжий язык и копчёная вырезка`, p:`5 990 ₸`},
+      {n:`Beef Tartar`, d:`Мелко нарезанный говяжий бонфиле, перепелиные яйца, красный лук, острый соус, чёрный перец, петрушка`, p:`5 990 ₸`},
+      {n:`Сырная тарелка`, d:`Чеддар, моцарелла, чечил, пармезан, эзине`, p:`6 490 ₸`},
+    ]},
+    { key:'meze', title:`Турецкие закуски и мезе`, items:[
+      {n:`Джаджик`, d:`Турецкий йогурт, огурцы`, p:`2 490 ₸`},
+      {n:`Чи-кёфте`, p:`2 450 ₸`},
+      {n:`Атом`, d:`Сюзме, острый перец, чеснок`, p:`1 790 ₸`},
+      {n:`Хумус`, d:`Нохут, чеснок, тахин, кимён`, p:`1 990 ₸`},
+      {n:`Долма в гранатовом соусе`, d:`Рис, лук, гранатовые листья`, p:`1 990 ₸`},
+      {n:`Мутаббаль с баклажаном`, d:`Баклажан, турецкий йогурт, чеснок, тахин`, p:`1 790 ₸`},
+      {n:`Мутаббаль со свёклой`, d:`Свёкла, турецкий йогурт, чеснок, тахин, кунжут`, p:`1 790 ₸`},
+      {n:`Бабагануш`, d:`Баклажан, болгарский перец, чеснок`, p:`1 990 ₸`},
+      {n:`Эзме`, d:`Перец, помидор, огурцы, петрушка, острый перец, гранатовый соус`, p:`1 990 ₸`},
+      {n:`Чингене`, d:`Кабачки, турецкий йогурт, чеснок, грецкий орех`, p:`1 790 ₸`},
+      {n:`Ассорти мезе`, p:`6 990 ₸`},
+      {n:`Муамарра`, d:`Красный сладкий перец, панировочные сухари, лук, чеснок, грецкий орех`, p:`2 290 ₸`, isNew:true},
+      {n:`Хаялет борек`, d:`Блинчики, капуста, морковь, курица`, p:`3 190 ₸`},
+    ]},
+    { key:'hot-app', title:`Горячие закуски`, items:[
+      {n:`Ичли кёфте`, d:`Говяжий фарш, лук, зелень, перец, булгур`, p:`2 790 ₸`},
+      {n:`Жареная картошка по-мерсински`, p:`2 100 ₸`},
+      {n:`Запечённые грибы с сыром чеддер`, p:`2 690 ₸`},
+      {n:`Запечённые креветки`, d:`Перец, грибы, помидор, креветки`, p:`5 190 ₸`},
+      {n:`Турецкие манты Çitir manti`, d:`Турецкий йогурт, турецкие манты, чеснок, соль, томатный соус`, p:`3 890 ₸`},
+    ]},
+    { key:'sides', title:`Гарниры`, items:[
+      {n:`Хумус с мясом`, p:`3 990 ₸`},
+      {n:`Овощи на гриле`, p:`2 790 ₸`},
+      {n:`Кумпир с сыром`, p:`2 490 ₸`},
+      {n:`Тушёный шпинат с грибами`, p:`1 790 ₸`},
+      {n:`Булгур`, p:`1 390 ₸`},
+      {n:`Фри`, p:`1 790 ₸`},
+      {n:`Картофельные дольки`, p:`1 990 ₸`},
+      {n:`Рис`, p:`1 390 ₸`},
+      {n:`Грибы с йогуртом`, d:`Жареный лаваш, турецкий йогурт, жареные грибы`, p:`3 490 ₸`},
+    ]},
+    { key:'steaks', title:`Стейки`, note:`Подаются с запечённой картошкой, тушёным шпинатом с грибами и соусом демиглас`, items:[
+      {n:`Yaprak New York`, p:`9 990 ₸`},
+      {n:`Антрекот`, p:`7 490 ₸`},
+      {n:`Стейк «Рибай»`, p:`11 490 ₸`},
+      {n:`Стейк «Томагавк»`, p:`16 990 ₸`},
+      {n:`Говяжьи спагетти`, p:`6 990 ₸`},
+      {n:`Стейк «Лукум»`, p:`6 990 ₸`},
+      {n:`Стейк «Даллас»`, p:`12 990 ₸`},
+      {n:`Стейк «Нью-Йорк»`, p:`8 990 ₸`},
+      {n:`Стейк «Тибон»`, p:`12 990 ₸`},
+    ]},
+    { key:'lamb-steaks', title:`Стейки из баранины`, items:[
+      {n:`Перзола`, p:`6 990 ₸`},
+      {n:`Филе баранины`, p:`7 690 ₸`},
+      {n:`«Нью-Йорк» из баранины`, p:`6 190 ₸`},
+      {n:`Цельные бараньи рёбрышки`, p:`21 990 ₸`},
+      {n:`Перзола с шоу-подачей`, p:`23 990 ₸`},
+    ]},
+    { key:'fish', title:`Рыба`, items:[
+      {n:`Морской окунь`, p:`6 890 ₸`},
+      {n:`Дорадо`, p:`6 890 ₸`},
+      {n:`Сёмга`, p:`8 990 ₸`},
+    ]},
+    { key:'special', title:`Особые блюда`, items:[
+      {n:`Конфит Перзола`, v:[{l:`2 человека`, p:`14 990 ₸`},{l:`4 человека`, p:`27 990 ₸`}]},
+      {n:`Асадо`, v:[{l:`2 рёбра`, p:`17 990 ₸`},{l:`4 рёбра`, p:`34 990 ₸`},{l:`6 рёбер`, p:`51 490 ₸`}]},
+    ]},
+    { key:'gold-steaks', title:`Стейки в 24-каратном золоте`, items:[
+      {n:`Hayalet Special`, v:[{l:`на двоих`, p:`20 990 ₸`},{l:`на 4-х`, p:`39 990 ₸`},{l:`на 6-х`, p:`58 990 ₸`}]},
+      {n:`Стейк «Даллас»`, p:`43 990 ₸`},
+      {n:`Стейк «Рибай»`, p:`38 990 ₸`},
+      {n:`Стейк «Томагавк»`, p:`48 990 ₸`},
+      {n:`Стейк из бонфиле`, p:`69 990 ₸`},
+    ]},
+    { key:'turkish-kebabs', title:`Turkish Kebabs`, items:[
+      {n:`Чокертме кебаб`, d:`Жареный картофель, турецкий йогурт, соус искандер, нарезка говядины, томатная паста, петрушка`, p:`6 490 ₸`},
+      {n:`Чобан кавурма`, d:`Болгарский перец, лук, помидор, говядина`, p:`5 490 ₸`},
+      {n:`Перзола из баранины`, p:`5 390 ₸`},
+      {n:`Куриный чокертме`, d:`Жареный картофель, йогурт, куриный шашлык`, p:`4 990 ₸`},
+      {n:`Шехзаде из говядины`, p:`7 490 ₸`},
+      {n:`Касап искандер`, d:`Тырнак пиде, йогурт, томатный соус, касап кофте`, p:`4 690 ₸`},
+      {n:`Медальон из говядины`, d:`Картофельное пюре, шпинатный крем, бонфиле`, p:`5 990 ₸`},
+      {n:`Фирменное мясо шефа`, d:`Красный сладкий перец, лук, чеснок, бонфиле`, p:`6 990 ₸`},
+    ]},
+    { key:'kebabs', title:`Кебабы и шашлыки`, note:`Подаются с булгуром и овощами на гриле`, items:[
+      {n:`Hayalet-кебаб`, p:`6 990 ₸`},
+      {n:`Адана`, p:`4 290 ₸`},
+      {n:`Урфа`, p:`4 290 ₸`},
+      {n:`Алиназик`, d:`Турецкий йогурт с чесноком, моцарелла, баклажан`, p:`5 490 ₸`},
+      {n:`Бейти сарма`, d:`Лаваш, баклажан, моцарелла, говядина и баранина, турецкий йогурт, соус искандер`, p:`4 990 ₸`},
+      {n:`Шашлык из баранины`, d:`Мелко нарезанный, петрушка, перец, помидор`, p:`5 490 ₸`},
+      {n:`Шашлык из курицы`, p:`4 090 ₸`},
+      {n:`Куриные крылышки`, p:`3 990 ₸`},
+      {n:`Куриная грудка`, p:`5 490 ₸`},
+      {n:`Ассорти-кебаб`, v:[{l:`на двоих`, p:`13 990 ₸`},{l:`на четверых`, p:`25 990 ₸`},{l:`на шестерых`, p:`51 990 ₸`}]},
+    ]},
+    { key:'kofte', title:`Котлеты и кофте`, items:[
+      {n:`Касап кофте`, p:`4 490 ₸`},
+      {n:`УФО котлеты`, p:`7 490 ₸`},
+      {n:`Мини кофте с сыром`, p:`4 990 ₸`},
+    ]},
+    { key:'pide', title:`Пиде`, items:[
+      {n:`Пиде с мясом кавурма`, p:`5 990 ₸`},
+      {n:`Пиде с сыром`, d:`Хрустящее пшеничное тесто, сыр моцарелла`, p:`4 190 ₸`},
+      {n:`Пиде с мясом`, d:`Пшеничное тесто, говядина`, p:`4 190 ₸`},
+      {n:`Лахмаджун`, d:`Фарш, томатный соус, лук, петрушка, лимон`, p:`3 190 ₸`},
+      {n:`Трабзон пиде со шпинатом`, d:`Хрустящее тесто, шпинат, сыр моцарелла`, p:`4 490 ₸`},
+      {n:`Hayalet пиде`, d:`Фарш, суджук, сыр моцарелла, петрушка`, p:`5 990 ₸`},
+    ]},
+    { key:'pasta', title:`Паста`, items:[
+      {n:`Арабьята`, d:`Пенне, томаты, острый перец, оливки`, p:`2 690 ₸`},
+      {n:`Пенне с мясом`, d:`Пенне, бонфиле, сливочный соус, репчатый лук, чеснок`, p:`3 390 ₸`},
+      {n:`Феттучини Альфредо`, d:`Феттучини, сливочный соус, репчатый лук, куриное филе`, p:`3 190 ₸`},
+      {n:`Феттучини с креветками`, d:`Феттучини, сливочный соус, репчатый лук, креветки, пармезан`, p:`5 490 ₸`},
+      {n:`Спагетти Болоньезе`, d:`Спагетти, томатный соус, говяжий фарш, пармезан`, p:`4 390 ₸`},
+    ]},
+    { key:'pizza', title:`Пицца`, items:[
+      {n:`Пицца четыре сыра`, d:`Сыр рокфор, моцарелла, чеддер, пармезан`, p:`3 990 ₸`},
+      {n:`Маргарита`, d:`Сыр моцарелла, базилик, томаты`, p:`3 190 ₸`},
+      {n:`Пицца с грибами`, d:`Грибы, сыр моцарелла, тимьян`, p:`3 690 ₸`},
+      {n:`Пицца с мясом`, d:`Ломтики говядины, моцарелла, чеддер`, p:`3 990 ₸`},
+      {n:`Фирменная пицца Hayalet`, d:`Бастурма, суджук, томаты, моцарелла, сладкий перец`, p:`3 990 ₸`},
+      {n:`Пепперони`, d:`Сыр моцарелла, говяжья колбаса, суджук`, p:`5 490 ₸`},
+    ]},
+    { key:'burgers', title:`Бургеры`, note:`Подаются с картофелем фри и соусами`, items:[
+      {n:`Гамбургер`, d:`Сочная котлета из говядины, солёные огурцы, помидоры`, p:`4 390 ₸`},
+      {n:`Чизбургер`, d:`Сочная котлета из говядины, сыр чеддер, солёные огурцы, помидоры`, p:`4 590 ₸`},
+      {n:`Лукум бургер`, d:`Говяжья вырезка, обжаренная на мангале, солёные корнишоны, помидоры черри`, p:`5 390 ₸`},
+      {n:`Мини бургер`, d:`Сочная котлета из говядины, помидор, салатные листья`, p:`3 890 ₸`},
+      {n:`Микс тарелка для детей`, d:`Котлеты, сосиски и картофель фри`, p:`3 190 ₸`},
+      {n:`Асадо бургер`, d:`Салатные листья, помидор, мясо из говядины`, p:`6 490 ₸`},
+      {n:`Hayalet бургер`, d:`Фарш из говядины, фюме, салатные листья`, p:`5 990 ₸`},
+    ]},
+    { key:'desserts', title:`Десерты`, items:[
+      {n:`Баклава (Хавуч дилим) с мороженым`, p:`2 990 ₸`},
+      {n:`Чизкейк`, p:`3 190 ₸`},
+      {n:`Сутлач`, p:`1 490 ₸`},
+      {n:`Магнолия`, p:`2 490 ₸`},
+      {n:`Медовик`, p:`2 990 ₸`},
+      {n:`Сникерс`, p:`2 990 ₸`},
+      {n:`Прага`, p:`2 990 ₸`},
+      {n:`Наполеон`, p:`2 990 ₸`},
+      {n:`Милки Дрим`, p:`3 190 ₸`},
+      {n:`Фисташковый рулет`, p:`3 490 ₸`},
+      {n:`Мини-фруктовое ассорти`, p:`7 890 ₸`},
+      {n:`Фруктовое ассорти`, p:`11 990 ₸`},
+      {n:`Марочино`, p:`2 990 ₸`},
+      {n:`Испанский чизкейк`, p:`2 990 ₸`},
+      {n:`Кадайф классический`, v:[{l:`1 шт`, p:`2 200 ₸`},{l:`1 кг`, p:`16 000 ₸`}]},
+      {n:`Хавуч`, v:[{l:`1 шт`, p:`3 190 ₸`},{l:`1 кг`, p:`18 000 ₸`}]},
+      {n:`Молочная баклава`, v:[{l:`1 шт`, p:`1 200 ₸`},{l:`1 кг`, p:`14 000 ₸`}]},
+    ]},
+  ],
 
-const BAR = [
-  { cat: "Холодные напитки", items: [
-    it("Coca-Cola","990 ₸"), it("Fanta","990 ₸"), it("Sprite","990 ₸"), it("Schweppes","1 590 ₸"),
-    it("Натуральный сок","690 ₸ · 1 990 ₸"), it("Ayran","890 ₸ · 2 490 ₸"),
-    it("Red Bull","1 590 ₸"), it("Borjomi","1 690 ₸"),
-    it("Tassay","690 ₸ · 1 290 ₸"), it("Tassay Excellent","2 090 ₸"), it("Tassay Emerald","2 090 ₸"),
-    it("Ягодный морс","2 490 ₸"),
-  ]},
-  { cat: "Чай", items: [
-    it("Чай турецкий","490 ₸"), it("Чай чёрный","1 990 ₸"), it("Зелёный чай","1 990 ₸"),
-    it("Зелёный чай с жасмином","1 990 ₸"), it("Облепиховый чай","2 690 ₸"), it("Марокканский чай","2 690 ₸"),
-    it("Имбирный с ромашкой","2 490 ₸"), it("Ташкентский чай","2 290 ₸"), it("Фруктово-ягодный","1 990 ₸"),
-  ]},
-  { cat: "Кофе", items: [
-    it("Эспрессо","1 090 ₸"), it("Двойной эспрессо","1 490 ₸"), it("Американо","1 190 ₸"),
-    it("Капучино","1 390 ₸"), it("Латте","1 490 ₸"), it("Турецкий кофе","1 290 ₸"),
-    it("Iced латте","1 590 ₸"), it("Iced американо","1 490 ₸"),
-  ]},
-  { cat: "Лимонады", items: [
-    it("Лимонады в ассортименте","2 790 ₸"), it("Ягодный tix","2 990 ₸"), it("Турецкий лимонад","3 900 ₸"),
-  ]},
-  { cat: "Iced tea", items: [
-    it("Фруктовый","2 490 ₸"), it("Ягодный","2 490 ₸"), it("Гранатовый","2 490 ₸"), it("Персиковый","2 490 ₸"),
-  ]},
-  { cat: "Свежевыжатые соки", items: [
-    it("Фреш яблоко","1 590 ₸"), it("Фреш апельсиновый","1 790 ₸"), it("Фреш морковный","1 290 ₸"), it("Микс фреш","1 990 ₸"),
-  ]},
-  { cat: "Безалкогольные коктейли", items: [
-    it("Мохито классический","1 990 ₸"), it("Мохито клубничный","2 190 ₸"), it("Солнечный свет","1 990 ₸"),
-    it("Шмель","1 790 ₸"), it("Малиновый сбитень","2 190 ₸"), it("Яблочное наслаждение","2 490 ₸"), it("Пеликан","1 990 ₸"),
-  ]},
-  { cat: "Молочные коктейли и смузи", items: [
-    it("Милкшейк Oreo","2 490 ₸"), it("Милкшейк шоколадный","2 490 ₸"), it("Милкшейк клубничный","2 140 ₸"),
-    it("Милкшейк банановый","2 490 ₸"), it("Смузи в ассортименте","1 990 ₸"),
-  ]},
-  { cat: "Ирландский виски", items: [
-    it("Jameson Original","2 500 ₸"), it("Bushmills Original","2 600 ₸"), it("Bushmills Black","3 000 ₸"),
-  ]},
-  { cat: "Шотландский виски", items: [
-    it("Ballantines Finest","2 400 ₸"), it("Chivas Regal 12 YO","2 990 ₸"), it("Johnny Walker Black Label","3 200 ₸"),
-    it("Monkey Shoulder","3 400 ₸"), it("Glenlivet Founder's Reserve","4 200 ₸"), it("Glenfiddich 12 YO","4 900 ₸"),
-    it("Chivas Regal 15 YO","5 500 ₸"), it("Johnny Walker Gold Label","5 900 ₸"),
-  ]},
-  { cat: "Американский виски", items: [
-    it("Jim Beam Double Oak","2 300 ₸"), it("Jim Beam Apple","2 300 ₸"), it("Jim Beam Honey","2 300 ₸"),
-    it("Jack Daniel's","2 600 ₸"), it("Jack Daniel's Gentlemen Jack","3 100 ₸"),
-  ]},
-  { cat: "Коньяк и бренди", items: [
-    it("Ararat 5 yo","2 500 ₸"), it("Ararat 7 yo","2 900 ₸"), it("Martell VS","3 200 ₸"),
-    it("Martell VSOP","4 900 ₸"), it("Martell XO","15 000 ₸"),
-  ], note: "Порция 50 мл"},
-  { cat: "Водка", items: [
-    it("Finlandia","2 100 ₸"), it("Absolut","2 200 ₸"), it("Русский Стандарт Gold","2 300 ₸"),
-    it("Русский Стандарт Платинум","2 400 ₸"), it("Reyka","2 600 ₸"), it("Wyborowa","2 000 ₸"),
-    it("Titos Handmade","2 800 ₸"), it("Ciroc","3 200 ₸"), it("Beluga Noble","3 700 ₸"),
-  ], note: "Порция 50 мл"},
-  { cat: "Ликёр", items: [
-    it("Jagermeister","2 200 ₸"), it("Bailey's","2 200 ₸"), it("Cointreau","2 200 ₸"),
-  ], note: "Порция 50 мл"},
-  { cat: "Джин", items: [
-    it("Beefeater Blue Orange","2 200 ₸"), it("Barrister Pink Strawberry","2 200 ₸"), it("Beefeater Black Berry","2 200 ₸"),
-    it("Beefeater London Dry","2 200 ₸"), it("ROKU Japan Gin","3 300 ₸"), it("Hendrick's","3 900 ₸"), it("Monkey 47","5 500 ₸"),
-  ], note: "Порция 50 мл"},
-  { cat: "Текила", items: [
-    it("Olmeca Gold","2 100 ₸"), it("Olmeca Silver","2 200 ₸"), it("Olmeca Altos","2 500 ₸"),
-    it("Espolon Blanco","2 900 ₸"), it("Patron Silver","3 700 ₸"), it("Patron Anejo","3 900 ₸"),
-  ], note: "Порция 50 мл"},
-  { cat: "Ром", items: [
-    it("Bacardi Carta Blanca","2 200 ₸"), it("Bacardi Carta Negra","2 300 ₸"), it("Bacardi Spiced","2 300 ₸"),
-    it("Havana Club White","2 100 ₸"), it("Havana Club Especial","2 100 ₸"), it("Havana Club Dark 7 YO","2 200 ₸"),
-  ], note: "Порция 50 мл"},
-  { cat: "Алкогольные коктейли", items: [
-    it("Mojito","3 000 ₸","Bacardi, strawberry, blackberry"), it("Gin Tonic","2 900 ₸"), it("Whiskey Sour","3 000 ₸"),
-    it("Cosmopolitan","3 000 ₸"), it("Aperol Spritz","3 000 ₸"), it("Long Island","3 100 ₸"),
-    it("Negroni","3 100 ₸"), it("Tequila Sunrise","3 100 ₸"),
-  ]},
-  { cat: "Türk rakısı", items: [
-    it("Yeni Raki","3 000 ₸"), it("Tekirdağ Gold","3 900 ₸"), it("Beylerbeyi Göbek","4 200 ₸"),
-  ]},
-  { cat: "Бутылочное пиво", items: [
-    it("Budweiser Non Alcohol 0.33","2 500 ₸"), it("Heineken 0.5","2 500 ₸"), it("Estrella 0.33","2 600 ₸"),
-    it("Corona Extra 0.33","2 800 ₸"), it("Paulaner Weissbier 0.5","3 100 ₸"), it("Paulaner Munchner 0.5","3 100 ₸"),
-    it("Budweiser 0.5","3 100 ₸"),
-  ]},
-  { cat: "Вермут", items: [
-    it("Martini Bianco","1 800 ₸"), it("Martini Rosso","1 800 ₸"), it("Martini Fiero","1 800 ₸"),
-    it("Redbull","1 590 ₸"), it("Schweppes Tonic","1 600 ₸"),
-  ], note: "Порция 100 мл"},
-];
+  bar: [
+    { key:'cold-drinks', title:`Холодные напитки`, items:[
+      {n:`Coca-Cola`, p:`990 ₸`}, {n:`Fanta`, p:`990 ₸`}, {n:`Sprite`, p:`990 ₸`}, {n:`Schweppes`, p:`1 590 ₸`},
+      {n:`Натуральный сок`, v:[{l:`маленький`, p:`690 ₸`},{l:`большой`, p:`1 990 ₸`}]},
+      {n:`Ayran`, v:[{l:`маленький`, p:`890 ₸`},{l:`большой`, p:`2 490 ₸`}]},
+      {n:`Red Bull`, p:`1 590 ₸`}, {n:`Borjomi`, p:`1 690 ₸`},
+      {n:`Tassay`, v:[{l:`маленький`, p:`690 ₸`},{l:`большой`, p:`1 290 ₸`}]},
+      {n:`Tassay Excellent`, p:`2 090 ₸`}, {n:`Tassay Emerald`, p:`2 090 ₸`}, {n:`Ягодный морс`, p:`2 490 ₸`},
+    ]},
+    { key:'tea', title:`Чай`, items:[
+      {n:`Чай турецкий`, p:`490 ₸`}, {n:`Чай чёрный`, p:`1 990 ₸`}, {n:`Зелёный чай`, p:`1 990 ₸`},
+      {n:`Зелёный чай с жасмином`, p:`1 990 ₸`}, {n:`Облепиховый чай`, p:`2 690 ₸`}, {n:`Марокканский чай`, p:`2 690 ₸`},
+      {n:`Имбирный с ромашкой`, p:`2 490 ₸`}, {n:`Ташкентский чай`, p:`2 290 ₸`}, {n:`Фруктово-ягодный`, p:`1 990 ₸`},
+    ]},
+    { key:'coffee', title:`Кофе`, items:[
+      {n:`Эспрессо`, p:`1 090 ₸`}, {n:`Двойной эспрессо`, p:`1 490 ₸`}, {n:`Американо`, p:`1 190 ₸`},
+      {n:`Капучино`, p:`1 390 ₸`}, {n:`Латте`, p:`1 490 ₸`}, {n:`Турецкий кофе`, p:`1 290 ₸`},
+      {n:`Iced латте`, p:`1 590 ₸`}, {n:`Iced американо`, p:`1 490 ₸`},
+    ]},
+    { key:'lemonade', title:`Лимонады`, items:[
+      {n:`Лимонады в ассортименте`, p:`2 790 ₸`}, {n:`Ягодный tix`, p:`2 990 ₸`}, {n:`Турецкий лимонад`, p:`3 900 ₸`},
+    ]},
+    { key:'iced-tea', title:`Iced Tea`, items:[
+      {n:`Фруктовый`, p:`2 490 ₸`}, {n:`Ягодный`, p:`2 490 ₸`}, {n:`Гранатовый`, p:`2 490 ₸`}, {n:`Персиковый`, p:`2 490 ₸`},
+    ]},
+    { key:'fresh', title:`Свежевыжатые соки`, items:[
+      {n:`Фреш яблоко`, p:`1 590 ₸`}, {n:`Фреш апельсиновый`, p:`1 790 ₸`}, {n:`Фреш морковный`, p:`1 290 ₸`}, {n:`Микс фреш`, p:`1 990 ₸`},
+    ]},
+    { key:'mocktails', title:`Безалкогольные коктейли`, items:[
+      {n:`Мохито классический`, p:`1 990 ₸`}, {n:`Мохито клубничный`, p:`2 190 ₸`}, {n:`Солнечный свет`, p:`1 990 ₸`},
+      {n:`Шмель`, p:`1 790 ₸`}, {n:`Малиновый сбитень`, p:`2 190 ₸`}, {n:`Яблочное наслаждение`, p:`2 490 ₸`}, {n:`Пеликан`, p:`1 990 ₸`},
+    ]},
+    { key:'milkshakes', title:`Молочные коктейли и смузи`, items:[
+      {n:`Милкшейк Oreo`, p:`2 490 ₸`}, {n:`Милкшейк шоколадный`, p:`2 490 ₸`}, {n:`Милкшейк клубничный`, p:`2 140 ₸`},
+      {n:`Милкшейк банановый`, p:`2 490 ₸`}, {n:`Смузи в ассортименте`, p:`1 990 ₸`},
+    ]},
+    { key:'irish-whiskey', title:`Ирландский виски`, note:`50 мл`, items:[
+      {n:`Jameson Original`, p:`2 500 ₸`}, {n:`Bushmills Original`, p:`2 600 ₸`}, {n:`Bushmills Black`, p:`3 000 ₸`},
+    ]},
+    { key:'scotch', title:`Шотландский виски`, note:`50 мл`, items:[
+      {n:`Ballantines Finest`, p:`2 400 ₸`}, {n:`Chivas Regal 12 YO`, p:`2 990 ₸`}, {n:`Johnnie Walker Black Label`, p:`3 200 ₸`},
+      {n:`Monkey Shoulder`, p:`3 400 ₸`}, {n:`Glenlivet Founder's Reserve`, p:`4 200 ₸`}, {n:`Glenfiddich 12 YO`, p:`4 900 ₸`},
+      {n:`Chivas Regal 15 YO`, p:`5 500 ₸`}, {n:`Johnnie Walker Gold Label`, p:`5 900 ₸`},
+    ]},
+    { key:'american-whiskey', title:`Американский виски`, note:`50 мл`, items:[
+      {n:`Jim Beam Double Oak`, p:`2 300 ₸`}, {n:`Jim Beam Apple`, p:`2 300 ₸`}, {n:`Jim Beam Honey`, p:`2 300 ₸`},
+      {n:`Jack Daniel's`, p:`2 600 ₸`}, {n:`Jack Daniel's Gentlemen Jack`, p:`3 100 ₸`},
+    ]},
+    { key:'cognac', title:`Коньяк и бренди`, note:`50 мл`, items:[
+      {n:`Ararat 5 YO`, p:`2 500 ₸`}, {n:`Ararat 7 YO`, p:`2 900 ₸`}, {n:`Martell VS`, p:`3 200 ₸`},
+      {n:`Martell VSOP`, p:`4 900 ₸`}, {n:`Martell XO`, p:`15 000 ₸`},
+    ]},
+    { key:'vodka', title:`Водка`, note:`50 мл`, items:[
+      {n:`Finlandia`, p:`2 100 ₸`}, {n:`Absolut`, p:`2 200 ₸`}, {n:`Русский Стандарт Gold`, p:`2 300 ₸`},
+      {n:`Русский Стандарт Платинум`, p:`2 400 ₸`}, {n:`Reyka`, p:`2 600 ₸`}, {n:`Wyborowa`, p:`2 000 ₸`},
+      {n:`Titos Hand Made`, p:`2 800 ₸`}, {n:`Ciroc`, p:`3 200 ₸`}, {n:`Beluga Noble`, p:`3 700 ₸`},
+    ]},
+    { key:'liqueur', title:`Ликёр`, note:`50 мл`, items:[
+      {n:`Jagermeister`, p:`2 200 ₸`}, {n:`Bailey's`, p:`2 200 ₸`}, {n:`Cointreau`, p:`2 200 ₸`},
+    ]},
+    { key:'gin', title:`Джин`, note:`50 мл`, items:[
+      {n:`Beefeater Blue Orange`, p:`2 200 ₸`}, {n:`Barrister Pink Strawberry`, p:`2 200 ₸`}, {n:`Beefeater Black Berry`, p:`2 200 ₸`},
+      {n:`Beefeater London Dry`, p:`2 200 ₸`}, {n:`ROKU Japan Gin`, p:`3 300 ₸`}, {n:`Hendrick's`, p:`3 900 ₸`}, {n:`Monkey 47`, p:`5 500 ₸`},
+    ]},
+    { key:'tequila', title:`Текила`, note:`50 мл`, items:[
+      {n:`Olmeca Gold`, p:`2 100 ₸`}, {n:`Olmeca Silver`, p:`2 200 ₸`}, {n:`Olmeca Altos`, p:`2 500 ₸`},
+      {n:`Espolon Blanco`, p:`2 900 ₸`}, {n:`Patron Silver`, p:`3 700 ₸`}, {n:`Patron Anejo`, p:`3 900 ₸`},
+    ]},
+    { key:'rum', title:`Ром`, note:`50 мл`, items:[
+      {n:`Bacardi Carta Blanca`, p:`2 200 ₸`}, {n:`Bacardi Carta Negra`, p:`2 300 ₸`}, {n:`Bacardi Spiced`, p:`2 300 ₸`},
+      {n:`Havana Club White`, p:`2 100 ₸`}, {n:`Havana Club Especial`, p:`2 100 ₸`}, {n:`Havana Club Dark 7 YO`, p:`2 200 ₸`},
+    ]},
+    { key:'cocktails', title:`Алкогольные коктейли`, items:[
+      {n:`Mojito`, d:`Bacardi, strawberry, blackberry`, p:`3 000 ₸`}, {n:`Gin Tonic`, p:`2 900 ₸`}, {n:`Whiskey Sour`, p:`3 000 ₸`},
+      {n:`Cosmopolitan`, p:`3 000 ₸`}, {n:`Aperol Spritz`, p:`3 000 ₸`}, {n:`Long Island`, p:`3 100 ₸`},
+      {n:`Negroni`, p:`3 100 ₸`}, {n:`Tequila Sunrise`, p:`3 100 ₸`},
+    ]},
+    { key:'raki', title:`Türk Rakısı`, items:[
+      {n:`Yeni Raki`, p:`3 000 ₸`}, {n:`Tekirdag Gold`, p:`3 900 ₸`}, {n:`Beylerbeyi Gobek`, p:`4 200 ₸`},
+    ]},
+    { key:'beer', title:`Бутылочное пиво`, items:[
+      {n:`Budweiser Non Alcohol 0.33`, p:`2 500 ₸`}, {n:`Heineken 0.5`, p:`2 500 ₸`}, {n:`Estrella 0.33`, p:`2 600 ₸`},
+      {n:`Corona Extra 0.33`, p:`2 800 ₸`}, {n:`Paulaner Weissbier 0.5`, p:`3 100 ₸`}, {n:`Paulaner Munchner 0.5`, p:`3 100 ₸`}, {n:`Budweiser 0.5`, p:`3 100 ₸`},
+    ]},
+    { key:'vermouth', title:`Вермут`, note:`100 мл`, items:[
+      {n:`Martini Bianco`, p:`1 800 ₸`}, {n:`Martini Rosso`, p:`1 800 ₸`}, {n:`Martini Fiero`, p:`1 800 ₸`},
+      {n:`Redbull`, p:`1 590 ₸`}, {n:`Schweppes Tonic`, p:`1 600 ₸`},
+    ]},
+  ],
 
-const WINE = [
-  { cat: "Шампанское и игристое", items: [
-    it("Rose IL Fresco, Villa Sandi, Brut","25 000 ₸"),
-    it("Prosecco IL Fresco, Villa Sandi, Brut","27 000 ₸"),
-    it("Prosecco, Valdobbiadene, Villa Sandi, Extra Dry","29 000 ₸"),
-    it("Drappier, «Carte d'Or», Brut","85 000 ₸"),
-    it("Drappier, Rosé de Saignée, Brut","95 000 ₸"),
-  ]},
-  { cat: "Белое вино", items: [
-    it("Pinot Grigio «Vivolo di Sasso», Italy","3 200 ₸ · 14 000 ₸"),
-    it("Chardonnay, Les Jamelles, Languedoc, France","4 500 ₸ · 20 000 ₸"),
-    it("Riesling, Dr. Loosen, Mosel, Germany (алк. 0%)","23 000 ₸"),
-    it("Semi Dulce, Baron de Ley, Rioja, Spain","27 000 ₸"),
-    it("Sauvignon Blanc, Marlborough Sun, New Zealand","29 000 ₸"),
-    it("Urban Riesling, La Scolca, Piemonte, Italy","39 000 ₸"),
-  ]},
-  { cat: "Розовое вино", items: [
-    it("Clair de Rose, Les Jamelles, Languedoc, France","3 950 ₸ · 19 000 ₸"),
-  ]},
-  { cat: "Красное вино", items: [
-    it("Allegre, Sangiovese, Cielo e Terra, Italy (semi sweet)","3 400 ₸ · 17 000 ₸"),
-    it("Shiraz «Beats the Devil», Taster Wine, Australia","3 900 ₸ · 19 000 ₸"),
-    it("Primitivo «Alternativa», Doppio Passo, Puglia (алк. 0%)","23 000 ₸"),
-    it("Pinot Noir, Les Jamelles, Languedoc, France","24 000 ₸"),
-    it("Primitivo, Doppio Passo, Puglia, Italy","25 000 ₸"),
-    it("Club Privado, Baron de Ley, Rioja, Spain","25 000 ₸"),
-    it("Zinfandel «Think Big!», California, USA (semi dry)","39 000 ₸"),
-    it("Comte de Dauzac, Bordeaux, France","39 000 ₸"),
-    it("Carmenere Grand Reserve, Los Boldos, Chile","39 000 ₸"),
-    it("Borgo del Mandorlo, Puglia, Italy","47 000 ₸"),
-    it("Museum Reserva, Finca Museum, Cigales, Spain","58 000 ₸"),
-    it("Le Difese, Tenuta San Guido, Toscana, Italy","70 000 ₸"),
-    it("Cabernet Sauvignon «Vintner's Reserve», Kendall-Jackson, USA","78 000 ₸"),
-  ]},
-];
+  wine: [
+    { key:'sparkling', title:`Шампанское и игристое`, items:[
+      {n:`Rose Il Fresco, Villa Sandi, Brut`, p:`25 000 ₸`},
+      {n:`Prosecco Il Fresco, Villa Sandi, Brut`, p:`27 000 ₸`},
+      {n:`Prosecco, Valdobbiadene, Villa Sandi, Extra Dry`, p:`29 000 ₸`},
+      {n:`Drappier, «Carte d'Or» Brut`, p:`85 000 ₸`},
+      {n:`Drappier, Rose de Saignee, Brut`, p:`95 000 ₸`},
+    ]},
+    { key:'white', title:`Белое вино`, items:[
+      {n:`Pinot Grigio «Vivolo di Sasso», Italy`, v:[{l:`бокал`, p:`3 200 ₸`},{l:`бутылка`, p:`14 000 ₸`}]},
+      {n:`Chardonnay, Les Jamelles, Languedoc, France`, v:[{l:`бокал`, p:`4 500 ₸`},{l:`бутылка`, p:`20 000 ₸`}]},
+      {n:`Riesling, Dr. Loosen, Mosel, Germany`, p:`23 000 ₸`},
+      {n:`Semi Dulce, Baron de Ley, Rioja, Spain`, p:`27 000 ₸`},
+      {n:`Sauvignon Blanc, Marlborough Sun, New Zealand`, p:`29 000 ₸`},
+      {n:`Urban Riesling, La Scolca, Piemonte, Italy`, p:`39 000 ₸`},
+    ]},
+    { key:'rose', title:`Розовое вино`, items:[
+      {n:`Clair de Rose, Les Jamelles, Languedoc, France`, v:[{l:`бокал`, p:`3 950 ₸`},{l:`бутылка`, p:`19 000 ₸`}]},
+    ]},
+    { key:'red', title:`Красное вино`, items:[
+      {n:`Allegre, Sangiovese, Cielo e Terra, Italy`, d:`Полусладкое`, v:[{l:`бокал`, p:`3 400 ₸`},{l:`бутылка`, p:`17 000 ₸`}]},
+      {n:`Shiraz «Beats the Devil» Taster Wine, Australia`, v:[{l:`бокал`, p:`3 900 ₸`},{l:`бутылка`, p:`19 000 ₸`}]},
+      {n:`Primitivo «Alternativa» Doppio Passo, Puglia, Italy`, p:`23 000 ₸`},
+      {n:`Pinot Noir, Les Jamelles, Languedoc, France`, p:`24 000 ₸`},
+      {n:`Primitivo, Doppio Passo, Puglia, Italy`, p:`25 000 ₸`},
+      {n:`Club Privado, Baron de Ley, Rioja, Spain`, p:`25 000 ₸`},
+      {n:`Zinfandel «Think Big!», California, USA`, p:`39 000 ₸`},
+      {n:`Comte de Dauzac, Bordeaux, France`, p:`39 000 ₸`},
+      {n:`Carmenere Grand Reserve, Los Boldos, Chile`, p:`39 000 ₸`},
+      {n:`Borgo del Mandorlo, Puglia, Italy`, p:`47 000 ₸`},
+      {n:`Museum Reserva, Finca Museum, Cigales, Spain`, p:`58 000 ₸`},
+      {n:`Le Difese, Tenuta San Guido, Toscana, Italy`, p:`70 000 ₸`},
+      {n:`Cabernet Sauvignon «Vintner's Reserve», Kendall-Jackson, California, USA`, p:`78 000 ₸`},
+    ]},
+  ],
+};
 
-/* =========================================================
+/* ======================================================================
    RENDER MENU
-========================================================= */
-function slug(s){ return s.toLowerCase().replace(/[^a-zа-я0-9]+/gi,'-'); }
-
-function renderPanel(data, pillsId, catsId, prefix){
-  const pillsEl = document.getElementById(pillsId);
-  const catsEl = document.getElementById(catsId);
-  data.forEach((group, i) => {
-    const id = prefix + '-' + slug(group.cat);
-    const pill = document.createElement('button');
-    pill.className = 'pill border border-bone/20 text-bone/70 text-[11px] tracking-[0.06em] uppercase px-4 py-2 whitespace-nowrap transition-colors';
-    pill.textContent = group.cat;
-    pill.dataset.target = id;
-    pill.dataset.active = i === 0 ? 'true' : 'false';
-    pillsEl.appendChild(pill);
-
-    const block = document.createElement('div');
-    block.id = id;
-    block.className = 'mb-16 scroll-mt-40 cat-block';
-    let html = `<h3 class="font-display text-xl md:text-2xl text-gold mb-2">${group.cat}</h3>`;
-    if(group.note){ html += `<p class="font-accent italic text-bone/45 text-sm mb-6">${group.note}</p>`; }
-    else { html += `<div class="mb-6"></div>`; }
-    html += `<div class="grid md:grid-cols-2 gap-x-12">`;
-    group.items.forEach(item => {
-      html += `
-        <div class="menu-item py-4 flex justify-between items-start gap-6 reveal-item">
-          <div>
-            <p class="text-bone font-medium">${item.n}</p>
-            ${item.d ? `<p class="text-bone/45 text-[13px] mt-1 leading-snug">${item.d}</p>` : ''}
-          </div>
-          <p class="font-accent italic text-gold text-lg whitespace-nowrap shrink-0">${item.p}</p>
-        </div>`;
-    });
-    html += `</div>`;
-    block.innerHTML = html;
-    catsEl.appendChild(block);
-  });
-
-  pillsEl.addEventListener('click', (e) => {
-    const btn = e.target.closest('.pill');
-    if(!btn) return;
-    [...pillsEl.children].forEach(p => p.dataset.active = 'false');
-    btn.dataset.active = 'true';
-    const target = document.getElementById(btn.dataset.target);
-    const y = target.getBoundingClientRect().top + window.scrollY - 150;
-    if(window.__lenis){ window.__lenis.scrollTo(y, {duration: 1.1}); } else { window.scrollTo({top:y, behavior:'smooth'}); }
-  });
+====================================================================== */
+function renderPrice(item) {
+  if (item.v) {
+    return item.v.map(x => `
+      <div class="flex items-baseline justify-between gap-4">
+        <span class="text-stone-dim text-xs">${x.l}</span>
+        <span class="price-tag text-sm">${x.p}</span>
+      </div>`).join('');
+  }
+  return `<span class="price-tag text-sm">${item.p}</span>`;
 }
 
-renderPanel(FOOD, 'pills-food', 'cats-food', 'food');
-renderPanel(BAR, 'pills-bar', 'cats-bar', 'bar');
-renderPanel(WINE, 'pills-wine', 'cats-wine', 'wine');
+function renderCategory(cat, tabKey) {
+  const count = cat.items.length;
+  const countLabel = pluralize(count, ['позиция','позиции','позиций']);
+  const rows = cat.items.map(item => `
+    <div class="dish-row py-4 flex items-start justify-between gap-6" data-dish-name="${item.n.toLowerCase()}">
+      <div class="min-w-0">
+        <p class="text-cream font-medium flex items-center gap-2 flex-wrap">
+          ${item.n}
+          ${item.isNew ? '<span class="text-[10px] font-mono tracking-wider text-ink bg-gold px-2 py-0.5 rounded-full">NEW</span>' : ''}
+        </p>
+        ${item.d ? `<p class="text-stone-dim text-sm mt-1 leading-snug max-w-lg">${item.d}</p>` : ''}
+      </div>
+      <div class="text-right shrink-0 pt-0.5">${renderPrice(item)}</div>
+    </div>
+  `).join('');
 
-/* top-level tab switching */
-document.querySelectorAll('.tab-btn').forEach(btn => {
+  return `
+    <div class="border border-hairline rounded-2xl mb-4 overflow-hidden bg-ink/40" data-category="${cat.key}" data-tab-owner="${tabKey}">
+      <div class="cat-header flex items-center justify-between gap-4 p-5 md:p-6">
+        <div>
+          <h3 class="font-display font-semibold text-lg md:text-xl text-cream">${cat.title}</h3>
+          <p class="text-stone-dim text-xs mt-1 font-mono">${count} ${countLabel}${cat.note ? ` · ${cat.note}` : ''}</p>
+        </div>
+        <svg class="cat-chevron shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a35b" stroke-width="1.8"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="cat-panel px-5 md:px-6">
+        <div class="pb-2">${rows}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderTab(tabKey) {
+  return MENU[tabKey].map(cat => renderCategory(cat, tabKey)).join('');
+}
+
+const menuPanels = document.getElementById('menu-panels');
+menuPanels.innerHTML = `
+  <div data-panel="main">${renderTab('main')}</div>
+  <div data-panel="bar" class="hidden">${renderTab('bar')}</div>
+  <div data-panel="wine" class="hidden">${renderTab('wine')}</div>
+`;
+
+/* accordion open/close */
+function openCategory(box, open) {
+  const header = box.querySelector('.cat-header');
+  const panel = box.querySelector('.cat-panel');
+  header.classList.toggle('is-open', open);
+  if (open) {
+    gsap.set(panel, { height: 'auto' });
+    const h = panel.offsetHeight;
+    gsap.fromTo(panel, { height: 0 }, { height: h, duration: 0.45, ease: 'power2.out', onComplete: () => gsap.set(panel, {height:'auto'}) });
+  } else {
+    gsap.to(panel, { height: 0, duration: 0.35, ease: 'power2.inOut' });
+  }
+}
+
+menuPanels.addEventListener('click', (e) => {
+  const header = e.target.closest('.cat-header');
+  if (!header) return;
+  const box = header.closest('[data-category]');
+  const isOpen = header.classList.contains('is-open');
+  openCategory(box, !isOpen);
+});
+
+/* open first category of each tab by default */
+document.querySelectorAll('[data-panel]').forEach(panel => {
+  const first = panel.querySelector('[data-category]');
+  if (first) openCategory(first, true);
+});
+
+/* tabs */
+document.querySelectorAll('.menu-tab').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.dataset.active = 'false');
-    btn.dataset.active = 'true';
+    document.querySelectorAll('.menu-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
     const tab = btn.dataset.tab;
-    ['food','bar','wine'].forEach(t => {
-      document.getElementById('panel-'+t).dataset.hidden = (t === tab) ? 'false' : 'true';
+    document.querySelectorAll('[data-panel]').forEach(p => {
+      p.classList.toggle('hidden', p.dataset.panel !== tab);
     });
-    ScrollTrigger.refresh();
   });
 });
 
-/* marquee content */
-const marqueeText = "МРАМОРНАЯ ГОВЯДИНА &nbsp;·&nbsp; ОГОНЬ МАНГАЛА &nbsp;·&nbsp; ЗОЛОТОЙ ЛИСТ &nbsp;·&nbsp; ТУРЕЦКОЕ ГОСТЕПРИИМСТВО &nbsp;·&nbsp; HAYALET &nbsp;·&nbsp; ";
-function fillMarquee(id, cls){
-  const el = document.getElementById(id);
-  el.style.whiteSpace = 'nowrap';
-  el.innerHTML = `<span class="font-display text-lg md:text-xl ${cls} px-4">${marqueeText.repeat(8)}</span>`;
-}
-fillMarquee('marquee-1','text-char');
-fillMarquee('marquee-2','text-char');
+/* jump-to-category button (signature section) */
+document.querySelectorAll('[data-open-category]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.openCategory;
+    const targetTabBtn = document.querySelector('.menu-tab[data-tab="main"]');
+    targetTabBtn.click();
+    const box = document.querySelector(`[data-category="${key}"]`);
+    if (box) {
+      openCategory(box, true);
+      setTimeout(() => {
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 150);
+    }
+  });
+});
 
-/* =========================================================
-   GSAP / LENIS / SCROLLTRIGGER / SPLITTYPE
-========================================================= */
+/* search */
+const searchInput = document.getElementById('menu-search');
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  const activeTab = document.querySelector('.menu-tab.active').dataset.tab;
+  const panel = document.querySelector(`[data-panel="${activeTab}"]`);
+  const categories = panel.querySelectorAll('[data-category]');
+
+  categories.forEach(box => {
+    const dishes = box.querySelectorAll('[data-dish-name]');
+    let anyMatch = false;
+    dishes.forEach(row => {
+      const match = q === '' || row.dataset.dishName.includes(q);
+      row.style.display = match ? '' : 'none';
+      if (match) anyMatch = true;
+    });
+    box.style.display = anyMatch ? '' : 'none';
+    if (q !== '' && anyMatch) {
+      openCategory(box, true);
+    } else if (q === '') {
+      openCategory(box, box === categories[0]);
+    }
+  });
+});
+
+/* ======================================================================
+   MOBILE MENU
+====================================================================== */
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobile-menu');
+burger.addEventListener('click', () => {
+  mobileMenu.classList.toggle('hidden');
+});
+document.querySelectorAll('.mobile-link').forEach(a => {
+  a.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+});
+
+/* nav background on scroll */
+const nav = document.getElementById('site-nav');
+function updateNav() {
+  if (window.scrollY > 40) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+}
+window.addEventListener('scroll', updateNav);
+updateNav();
+
+/* ======================================================================
+   GSAP / LENIS / SCROLLTRIGGER
+====================================================================== */
 gsap.registerPlugin(ScrollTrigger);
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Lenis smooth scroll
-const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
-window.__lenis = lenis;
-function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
-requestAnimationFrame(raf);
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add((time)=>{ lenis.raf(time*1000); });
-gsap.ticker.lagSmoothing(0);
-
-// Preloader
-window.addEventListener('load', () => {
-  gsap.timeline()
-    .to('#preloader-logo', {scale:1.08, duration:.6, ease:'power2.out'})
-    .to('#preloader', {opacity:0, duration:.6, ease:'power2.inOut', onComplete:()=>{ document.getElementById('preloader').style.display='none'; }}, '-=.1')
-    .add(heroIn, '-=.3');
-});
-
-// Hero split-text entrance
-function heroIn(){
-  const l1 = new SplitType('#hero-line-1', {types:'chars'});
-  const l2 = new SplitType('#hero-line-2', {types:'chars'});
-  gsap.set([...l1.chars, ...l2.chars], {display:'inline-block'});
-  const tl = gsap.timeline();
-  tl.to('.hero-eyebrow', {opacity:1, y:0, duration:.6, ease:'power2.out'})
-    .from(l1.chars, {yPercent:120, opacity:0, rotateZ:6, stagger:.028, duration:.9, ease:'power4.out'}, '-=.2')
-    .from(l2.chars, {yPercent:120, opacity:0, rotateZ:6, stagger:.02, duration:.8, ease:'power4.out'}, '-=.55')
-    .to('.hero-sub', {opacity:1, y:0, duration:.7, ease:'power2.out'}, '-=.35')
-    .to('.hero-cta', {opacity:1, y:0, duration:.7, ease:'power2.out'}, '-=.45');
+if (!reduceMotion) {
+  const lenis = new Lenis({
+    duration: 1.15,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+  });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
 }
-gsap.set('.hero-eyebrow', {y:14});
-gsap.set('.hero-sub', {y:16});
-gsap.set('.hero-cta', {y:16});
 
-// hero parallax image + scroll progress line
-gsap.to('#hero-img', {
-  yPercent: 14, ease:'none',
-  scrollTrigger: { trigger:'#top', start:'top top', end:'bottom top', scrub:true }
-});
-gsap.to('#scroll-line', {
-  top:'66%', ease:'none',
-  scrollTrigger: { trigger:'#top', start:'top top', end:'bottom top', scrub:true }
-});
+/* hero entrance */
+window.addEventListener('load', () => {
+  const heroSplit = new SplitType('#hero-title', { types: 'chars' });
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
-// nav shrink on scroll
-ScrollTrigger.create({
-  start: 80, end: 99999,
-  onUpdate: (self) => {
-    const nav = document.getElementById('site-nav');
-    if(self.scroll() > 80){ nav.classList.add('bg-char/90','backdrop-blur','border-b','border-gold/10'); }
-    else { nav.classList.remove('bg-char/90','backdrop-blur','border-b','border-gold/10'); }
+  if (reduceMotion) {
+    gsap.set(heroSplit.chars, { opacity: 1, y: 0 });
+    gsap.set('[data-hero]', { opacity: 1, y: 0 });
+  } else {
+    tl.from(heroSplit.chars, { opacity: 0, y: 70, rotateX: -35, stagger: 0.035, duration: 1.1 })
+      .from('[data-hero]', { opacity: 0, y: 24, stagger: 0.12, duration: 0.9 }, '-=0.6')
+      .from('#hero-logo-mark', { opacity: 0, scale: 0.9, duration: 1.4, ease: 'power2.out' }, '-=1.2');
   }
 });
 
-// generic reveal-up
-gsap.utils.toArray('.reveal-up').forEach(el => {
+/* generic scroll reveals */
+gsap.utils.toArray('[data-reveal]').forEach((el) => {
+  if (reduceMotion) { gsap.set(el, { opacity: 1, y: 0 }); return; }
   gsap.from(el, {
-    opacity:0, y:40, duration:.9, ease:'power3.out',
-    scrollTrigger: { trigger: el, start: 'top 85%' }
+    opacity: 0, y: 46, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 88%' }
   });
 });
 
-// gallery parallax
-gsap.utils.toArray('.parallax-img img').forEach((img, i) => {
-  gsap.fromTo(img, {yPercent: -8}, {
-    yPercent: 8, ease:'none',
-    scrollTrigger: { trigger: img, start:'top bottom', end:'bottom top', scrub:true }
+/* gold signature parallax */
+if (!reduceMotion) {
+  gsap.to('#gold-img', {
+    yPercent: -14,
+    scale: 1.22,
+    ease: 'none',
+    scrollTrigger: { trigger: '#signature', start: 'top bottom', end: 'bottom top', scrub: true }
   });
-});
 
-// menu items stagger reveal (batch, since injected dynamically)
-ScrollTrigger.batch('.reveal-item', {
-  start: 'top 92%',
-  onEnter: batch => gsap.from(batch, {opacity:0, y:18, stagger:.05, duration:.6, ease:'power2.out', overwrite:true}),
-  once: true
-});
-ScrollTrigger.batch('.cat-block', {
-  start: 'top 90%',
-  onEnter: batch => gsap.from(batch, {opacity:0, y:24, stagger:.08, duration:.7, ease:'power2.out', overwrite:true}),
-  once: true
-});
+  gsap.to('#hero-bg', {
+    yPercent: 12,
+    scale: 1.1,
+    ease: 'none',
+    scrollTrigger: { trigger: '#home', start: 'top top', end: 'bottom top', scrub: true }
+  });
 
-// marquee infinite scroll via GSAP
-function loopMarquee(id, dir){
-  const el = document.getElementById(id);
-  gsap.to(el, { xPercent: dir, duration: 22, ease:'none', repeat:-1 });
+  /* gallery parallax */
+  document.querySelectorAll('[data-parallax]').forEach((el) => {
+    const speed = parseFloat(el.dataset.parallax);
+    gsap.to(el.querySelector('img'), {
+      yPercent: speed * 100,
+      ease: 'none',
+      scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true }
+    });
+  });
 }
-requestAnimationFrame(() => {
-  loopMarquee('marquee-1', -50);
-  loopMarquee('marquee-2', -50);
-  ScrollTrigger.refresh();
-});
-
-window.addEventListener('resize', () => ScrollTrigger.refresh());
 </script>
 </body>
 </html>
